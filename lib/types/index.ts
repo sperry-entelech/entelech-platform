@@ -1,4 +1,5 @@
 // Core types for Entelech Platform
+export * from './project';
 export type EngagementType = 'agency-optimization' | 'lead-conversion' | 'proposal-system' | 'client-retention';
 
 export interface Client {

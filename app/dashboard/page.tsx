@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { getAllSkills } from '@/lib/services/skills-factory';
+import { ProjectRegistry } from '@/lib/services/project-registry';
 
 export default function DashboardPage() {
   const [skillsCount, setSkillsCount] = useState(0);
@@ -26,12 +27,16 @@ export default function DashboardPage() {
     }
   };
 
+  const projectStats = ProjectRegistry.getStats();
+
   const stats = {
     activeEngagements: 3,
     avgDeliveryTime: 28,
     valueDelivered: 45000,
     clientSatisfaction: 4.8,
     skillsCount: loading ? '...' : skillsCount,
+    totalProjects: projectStats.total,
+    activeProjects: projectStats.active,
   };
 
   return (
@@ -44,7 +49,7 @@ export default function DashboardPage() {
           </Link>
         </div>
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-6 mb-8">
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium text-slate-600">Active Engagements</CardTitle>
@@ -89,6 +94,24 @@ export default function DashboardPage() {
               <div className="text-3xl font-bold text-purple-600">{stats.skillsCount}</div>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium text-slate-600">Total Projects</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-slate-900">{stats.totalProjects}</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium text-slate-600">Active Projects</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-green-600">{stats.activeProjects}</div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Recent Engagements */}
@@ -130,14 +153,14 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <Link href="/clients" className="block">
+                <Link href="/systems" className="block">
                   <Button className="w-full" variant="outline">
-                    View All Clients
+                    View Business Systems
                   </Button>
                 </Link>
-                <Link href="/engagements" className="block">
+                <Link href="/projects" className="block">
                   <Button className="w-full" variant="outline">
-                    Manage Engagements
+                    Browse All Projects
                   </Button>
                 </Link>
                 <Link href="/skills" className="block">
@@ -148,6 +171,11 @@ export default function DashboardPage() {
                 <Link href="/cursor-prompts" className="block">
                   <Button className="w-full" variant="outline">
                     Generate Cursor Prompts
+                  </Button>
+                </Link>
+                <Link href="/clients" className="block">
+                  <Button className="w-full" variant="outline">
+                    View All Clients
                   </Button>
                 </Link>
               </div>
