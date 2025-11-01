@@ -186,7 +186,7 @@ export default function NewEngagementPage() {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {results.nextSteps.map((step, i) => (
+                  {results.nextSteps.map((step: string, i: number) => (
                     <li key={i} className="flex items-start">
                       <span className="mr-2">{i + 1}.</span>
                       <span>{step}</span>
