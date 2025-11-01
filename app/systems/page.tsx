@@ -66,17 +66,17 @@ export default function SystemsPage() {
   const allCategories = Object.keys(AGENCY_SYSTEM_CATEGORIES) as SystemCategory[];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-950">
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Business Systems Hub</h1>
-          <p className="text-slate-600">
+          <h1 className="text-3xl font-bold text-white mb-2">Business Systems Hub</h1>
+          <p className="text-slate-400">
             Complete business system architecture based on{' '}
             <Link
               href="https://github.com/sperry-entelech/agency"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-400 hover:underline"
             >
               agency repository documentation
             </Link>
@@ -91,19 +91,19 @@ export default function SystemsPage() {
             const description = SYSTEM_DESCRIPTIONS[category];
 
             return (
-              <Card key={category} className="hover:shadow-lg transition-shadow">
+              <Card key={category} className="bg-slate-900 border-slate-800 hover:border-slate-700 transition-colors">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
-                    <Icon className="h-6 w-6 text-blue-600" />
-                    <CardTitle>{categoryName}</CardTitle>
+                    <Icon className="h-6 w-6 text-blue-400" />
+                    <CardTitle className="text-white">{categoryName}</CardTitle>
                   </div>
-                  <CardDescription>{description}</CardDescription>
+                  <CardDescription className="text-slate-400">{description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">Projects</span>
-                      <Badge variant="secondary">{projects.length}</Badge>
+                      <span className="text-sm text-slate-400">Projects</span>
+                      <Badge variant="secondary" className="bg-slate-800 text-slate-300">{projects.length}</Badge>
                     </div>
                     {projects.length > 0 && (
                       <div className="space-y-2">
@@ -113,7 +113,7 @@ export default function SystemsPage() {
                             <li key={project.id}>
                               <Link
                                 href={`/projects?category=${category}`}
-                                className="text-sm text-blue-600 hover:underline"
+                                className="text-sm text-blue-400 hover:underline"
                               >
                                 {project.name}
                               </Link>
@@ -128,7 +128,7 @@ export default function SystemsPage() {
                       </div>
                     )}
                     <Link href={`/projects?category=${category}`}>
-                      <Button variant="outline" className="w-full" size="sm">
+                      <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:bg-slate-800" size="sm">
                         View All Projects
                       </Button>
                     </Link>
@@ -140,13 +140,13 @@ export default function SystemsPage() {
         </div>
 
         {/* Agency Repo Link */}
-        <Card className="mt-8 bg-blue-50 border-blue-200">
+        <Card className="mt-8 bg-slate-900 border-slate-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <FileText className="h-5 w-5 text-blue-400" />
               Complete System Documentation
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-400">
               For detailed architecture, workflows, and system specifications
             </CardDescription>
           </CardHeader>
@@ -156,7 +156,7 @@ export default function SystemsPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button className="gap-2">
+              <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
                 <FileText className="h-4 w-4" />
                 View Agency Repository
               </Button>

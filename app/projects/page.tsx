@@ -73,47 +73,47 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-950">
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Projects Hub</h1>
-          <p className="text-slate-600">
+          <h1 className="text-3xl font-bold text-white mb-2">Projects Hub</h1>
+          <p className="text-slate-400">
             All Entelech business systems, tools, and projects in one place
           </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card>
+          <Card className="bg-slate-900 border-slate-800">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Total Projects</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">Total Projects</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
+              <div className="text-2xl font-bold text-white">{stats.total}</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-slate-900 border-slate-800">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Active</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">Active</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+              <div className="text-2xl font-bold text-green-400">{stats.active}</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-slate-900 border-slate-800">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Categories</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">Categories</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.categories}</div>
+              <div className="text-2xl font-bold text-white">{stats.categories}</div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-slate-900 border-slate-800">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Native Integrations</CardTitle>
+              <CardTitle className="text-sm font-medium text-slate-400">Native Integrations</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{stats.nativeIntegrations}</div>
+              <div className="text-2xl font-bold text-blue-400">{stats.nativeIntegrations}</div>
             </CardContent>
           </Card>
         </div>
@@ -124,12 +124,12 @@ export default function ProjectsPage() {
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1"
+            className="flex-1 bg-slate-900 border-slate-800 text-white placeholder:text-slate-500"
           />
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value as SystemCategory | 'all')}
-            className="px-4 py-2 border rounded-md"
+            className="px-4 py-2 border border-slate-800 rounded-md bg-slate-900 text-white"
           >
             <option value="all">All Categories</option>
             {categories.map((cat) => (
@@ -141,7 +141,7 @@ export default function ProjectsPage() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as any)}
-            className="px-4 py-2 border rounded-md"
+            className="px-4 py-2 border border-slate-800 rounded-md bg-slate-900 text-white"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
@@ -152,7 +152,7 @@ export default function ProjectsPage() {
 
         {/* Projects by Category */}
         {Object.keys(groupedProjects).length === 0 ? (
-          <Card>
+          <Card className="bg-slate-900 border-slate-800">
             <CardContent className="py-12 text-center">
               <p className="text-slate-500">No projects found matching your filters.</p>
             </CardContent>
@@ -160,30 +160,33 @@ export default function ProjectsPage() {
         ) : (
           Object.entries(groupedProjects).map(([category, projects]) => (
             <div key={category} className="mb-8">
-              <h2 className="text-xl font-semibold text-slate-900 mb-4">
+              <h2 className="text-xl font-semibold text-white mb-4">
                 {ProjectRegistry.getCategoryName(category as SystemCategory)}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {projects.map((project) => {
                   const Icon = getIcon(project.icon);
                   return (
-                    <Card key={project.id} className="hover:shadow-lg transition-shadow">
+                    <Card key={project.id} className="bg-slate-900 border-slate-800 hover:border-slate-700 transition-colors">
                       <CardHeader>
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-2">
-                            <Icon className="h-5 w-5 text-blue-600" />
-                            <CardTitle className="text-lg">{project.name}</CardTitle>
+                            <Icon className="h-5 w-5 text-blue-400" />
+                            <CardTitle className="text-lg text-white">{project.name}</CardTitle>
                           </div>
-                          <Badge variant={getStatusVariant(project.status)}>
+                          <Badge variant={getStatusVariant(project.status)} className={
+                            project.status === 'active' ? 'bg-green-600' :
+                            project.status === 'beta' ? 'bg-yellow-600' : 'bg-slate-700'
+                          }>
                             {project.status}
                           </Badge>
                         </div>
-                        <CardDescription className="mt-2">{project.description}</CardDescription>
+                        <CardDescription className="mt-2 text-slate-400">{project.description}</CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="flex flex-wrap gap-2 mb-4">
                           {project.tags.slice(0, 3).map((tag) => (
-                            <Badge key={tag} variant="outline" className="text-xs">
+                            <Badge key={tag} variant="outline" className="text-xs border-slate-700 text-slate-300">
                               {tag}
                             </Badge>
                           ))}
@@ -191,7 +194,7 @@ export default function ProjectsPage() {
                         <div className="flex gap-2">
                           {project.githubRepo && (
                             <Link href={project.githubRepo} target="_blank" rel="noopener noreferrer">
-                              <Button variant="outline" size="sm" className="gap-2">
+                              <Button variant="outline" size="sm" className="gap-2 border-slate-700 text-slate-300 hover:bg-slate-800">
                                 <Github className="h-4 w-4" />
                                 Repo
                               </Button>
@@ -203,7 +206,7 @@ export default function ProjectsPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <Button variant="outline" size="sm" className="gap-2">
+                              <Button variant="outline" size="sm" className="gap-2 border-slate-700 text-slate-300 hover:bg-slate-800">
                                 <Globe className="h-4 w-4" />
                                 View
                               </Button>
@@ -215,7 +218,7 @@ export default function ProjectsPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <Button variant="outline" size="sm" className="gap-2">
+                              <Button variant="outline" size="sm" className="gap-2 border-slate-700 text-slate-300 hover:bg-slate-800">
                                 <BookOpen className="h-4 w-4" />
                                 Docs
                               </Button>

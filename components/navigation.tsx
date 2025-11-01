@@ -49,12 +49,12 @@ export function Navigation() {
   ];
 
   return (
-    <nav className="border-b bg-white sticky top-0 z-50">
+    <nav className="border-b border-slate-800 bg-slate-900 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
-            <Zap className="h-6 w-6 text-blue-600" />
-            <span className="text-xl font-bold text-slate-900">Entelech Platform</span>
+            <Zap className="h-6 w-6 text-blue-400" />
+            <span className="text-xl font-bold text-white">Entelech Platform</span>
           </Link>
           <div className="flex items-center gap-1">
             {navItems.map((item) => {
@@ -65,7 +65,11 @@ export function Navigation() {
                 <Link key={item.href} href={item.href}>
                   <Button
                     variant={isActive ? 'default' : 'ghost'}
-                    className="flex items-center gap-2"
+                    className={`flex items-center gap-2 ${
+                      isActive
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    }`}
                   >
                     <Icon className="h-4 w-4" />
                     {item.label}
