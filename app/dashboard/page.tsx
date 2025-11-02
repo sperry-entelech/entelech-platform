@@ -156,6 +156,11 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
+                <Link href="/tools" className="block">
+                  <Button className="w-full border-slate-700 text-slate-300 hover:bg-slate-800" variant="outline">
+                    Business Tools Hub
+                  </Button>
+                </Link>
                 <Link href="/systems" className="block">
                   <Button className="w-full border-slate-700 text-slate-300 hover:bg-slate-800" variant="outline">
                     View Business Systems

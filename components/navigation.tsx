@@ -11,7 +11,6 @@ import {
   Zap,
   Building2,
   FolderKanban,
-  FileText,
   Settings,
 } from 'lucide-react';
 
@@ -43,6 +42,7 @@ export function Navigation() {
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/systems', label: 'Systems', icon: Building2 },
     { href: '/projects', label: 'Projects', icon: FolderKanban },
+    { href: '/tools', label: 'Tools', icon: Settings },
     { href: '/skills', label: 'Skills', icon: BookOpen },
     { href: '/cursor-prompts', label: 'Prompts', icon: Sparkles },
     { href: '/clients', label: 'Clients', icon: Users },
