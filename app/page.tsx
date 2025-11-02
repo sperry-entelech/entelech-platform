@@ -69,12 +69,22 @@ export default function Home() {
         </div>
 
         {/* Quick Start */}
-        <div className="text-center">
-          <Link href="/dashboard">
-            <Button size="lg" className="text-lg px-8 bg-blue-600 hover:bg-blue-700">
-              Open Dashboard →
-            </Button>
-          </Link>
+        <div className="text-center space-y-4">
+          <div className="flex items-center justify-center gap-4">
+            <Link href="/dashboard">
+              <Button size="lg" className="text-lg px-8 bg-blue-600 hover:bg-blue-700">
+                Open Dashboard →
+              </Button>
+            </Link>
+            <Link href="/audit">
+              <Button size="lg" variant="outline" className="text-lg px-8 border-slate-700 text-slate-300 hover:bg-slate-800">
+                Request Free Audit
+              </Button>
+            </Link>
+          </div>
+          <p className="text-sm text-slate-500">
+            New clients: Start with a free business audit
+          </p>
         </div>
       </main>
     </div>
