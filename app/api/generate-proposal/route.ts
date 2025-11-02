@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { logger } from '@/lib/services/logging';
+import { GoogleSheetsService } from '@/lib/services/google-sheets';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -65,6 +67,36 @@ Format the proposal with clear sections and professional language.`;
     });
 
     const proposal = response.content[0].type === 'text' ? response.content[0].text : 'Failed to generate proposal';
+
+    // Log proposal generation
+    logger.success('proposal', `Proposal generated for ${clientData.companyName}`, {
+      companyName: clientData.companyName,
+      industry: clientData.industry,
+    });
+
+    // Save to Google Sheets if configured
+    try {
+      const sheetsConfig = await GoogleSheetsService.getConfig();
+      if (sheetsConfig) {
+        const sheets = new GoogleSheetsService(sheetsConfig);
+        await sheets.appendRow({
+          'Timestamp': new Date().toISOString(),
+          'Type': 'Proposal',
+          'Company Name': clientData.companyName,
+          'Industry': clientData.industry || '',
+          'Revenue': clientData.currentRevenue || '',
+          'Status': 'Generated',
+        });
+        logger.success('integration', 'Proposal saved to Google Sheets', {
+          companyName: clientData.companyName,
+        });
+      }
+    } catch (error) {
+      logger.error('integration', 'Failed to save proposal to Google Sheets', {
+        error: (error as Error).message,
+      });
+      // Continue even if Sheets fails
+    }
 
     return NextResponse.json({ proposal });
   } catch (error: any) {

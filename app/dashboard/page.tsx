@@ -186,6 +186,16 @@ export default function DashboardPage() {
                     View All Clients
                   </Button>
                 </Link>
+                <Link href="/integrations" className="block">
+                  <Button className="w-full border-slate-700 text-slate-300 hover:bg-slate-800" variant="outline">
+                    Manage Integrations
+                  </Button>
+                </Link>
+                <Link href="/logs" className="block">
+                  <Button className="w-full border-slate-700 text-slate-300 hover:bg-slate-800" variant="outline">
+                    View Platform Logs
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>

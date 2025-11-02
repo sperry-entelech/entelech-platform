@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { logger } from '@/lib/services/logging';
+import { GoogleSheetsService } from '@/lib/services/google-sheets';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -75,6 +77,36 @@ Create a professional SOW document that:
     });
 
     const sow = response.content[0].type === 'text' ? response.content[0].text : 'Failed to generate SOW';
+
+    // Log SOW generation
+    logger.success('sow', `SOW generated for ${sowData.projectName}`, {
+      projectName: sowData.projectName,
+      clientName: sowData.clientName,
+    });
+
+    // Save to Google Sheets if configured
+    try {
+      const sheetsConfig = await GoogleSheetsService.getConfig();
+      if (sheetsConfig) {
+        const sheets = new GoogleSheetsService(sheetsConfig);
+        await sheets.appendRow({
+          'Timestamp': new Date().toISOString(),
+          'Type': 'SOW',
+          'Project Name': sowData.projectName,
+          'Client Name': sowData.clientName || '',
+          'Budget': sowData.budget || '',
+          'Status': 'Generated',
+        });
+        logger.success('integration', 'SOW saved to Google Sheets', {
+          projectName: sowData.projectName,
+        });
+      }
+    } catch (error) {
+      logger.error('integration', 'Failed to save SOW to Google Sheets', {
+        error: (error as Error).message,
+      });
+      // Continue even if Sheets fails
+    }
 
     return NextResponse.json({ sow });
   } catch (error: any) {

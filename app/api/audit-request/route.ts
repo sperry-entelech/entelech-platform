@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { logger } from '@/lib/services/logging';
+import { GoogleSheetsService } from '@/lib/services/google-sheets';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -141,12 +143,43 @@ Make it professional, insightful, and immediately actionable.`;
 
     const auditReport = response.content[0].type === 'text' ? response.content[0].text : 'Failed to generate audit';
 
-    // TODO: Store audit request in database and send email
-    // For now, return success with report (in production, you'd email it)
+    // Log audit request
+    const auditRequestId = `audit-${Date.now()}`;
+    logger.info('audit', `Audit request submitted: ${auditLevel}`, {
+      auditRequestId,
+      companyName,
+      email,
+      auditLevel,
+    });
+
+    // Save to Google Sheets if configured
+    try {
+      const sheetsConfig = await GoogleSheetsService.getConfig();
+      if (sheetsConfig) {
+        const sheets = new GoogleSheetsService(sheetsConfig);
+        await sheets.appendRow({
+          'Timestamp': new Date().toISOString(),
+          'Audit Level': auditLevel,
+          'Company Name': companyName,
+          'Contact Name': contactName,
+          'Email': email,
+          'Phone': phone || '',
+          'Industry': industry || '',
+          'Company Size': companySize || '',
+          'Revenue': currentRevenue || '',
+          'Status': 'Submitted',
+          'Audit Request ID': auditRequestId,
+        });
+        logger.success('integration', 'Audit request saved to Google Sheets', { auditRequestId });
+      }
+    } catch (error) {
+      logger.error('integration', 'Failed to save to Google Sheets', { error: (error as Error).message });
+      // Continue even if Sheets fails
+    }
 
     return NextResponse.json({
       success: true,
-      auditRequestId: `audit-${Date.now()}`,
+      auditRequestId,
       message: `Your ${auditLevel} audit has been submitted. Report will be delivered within ${auditLevel === 'basic' ? '24' : auditLevel === 'standard' ? '48' : '72'} hours.`,
       reportPreview: auditReport.substring(0, 500), // Preview only
       analysisId: analysis?.analysisId,

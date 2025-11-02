@@ -12,6 +12,8 @@ import {
   Building2,
   FolderKanban,
   Settings,
+  Activity,
+  Link2,
 } from 'lucide-react';
 
 export function Navigation() {
@@ -43,6 +45,8 @@ export function Navigation() {
     { href: '/systems', label: 'Systems', icon: Building2 },
     { href: '/projects', label: 'Projects', icon: FolderKanban },
     { href: '/tools', label: 'Tools', icon: Settings },
+    { href: '/integrations', label: 'Integrations', icon: Link2 },
+    { href: '/logs', label: 'Logs', icon: Activity },
     { href: '/skills', label: 'Skills', icon: BookOpen },
     { href: '/cursor-prompts', label: 'Prompts', icon: Sparkles },
     { href: '/clients', label: 'Clients', icon: Users },
