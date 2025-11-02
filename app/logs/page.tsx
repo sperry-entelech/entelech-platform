@@ -107,15 +107,18 @@ export default function LogsPage() {
   const exportLogs = () => {
     const csv = [
       ['Timestamp', 'Level', 'Category', 'Message', 'Metadata'].join(','),
-      ...filteredLogs.map((log) =>
-        [
-          log.timestamp.toISOString(),
+      ...filteredLogs.map((log) => {
+        const timestamp = log.timestamp instanceof Date 
+          ? log.timestamp 
+          : new Date(log.timestamp);
+        return [
+          timestamp.toISOString(),
           log.level,
           log.category,
           `"${log.message.replace(/"/g, '""')}"`,
           `"${JSON.stringify(log.metadata || {}).replace(/"/g, '""')}"`,
-        ].join(',')
-      ),
+        ].join(',');
+      }),
     ].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv' });
