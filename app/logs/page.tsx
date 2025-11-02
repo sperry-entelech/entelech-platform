@@ -5,8 +5,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { logger, LogEntry, LogLevel, LogCategory } from '@/lib/services/logging';
-import { Activity, Download, Trash2, Filter } from 'lucide-react';
+import { Activity, Download, Trash2 } from 'lucide-react';
+
+type LogLevel = 'info' | 'warning' | 'error' | 'success';
+type LogCategory = 'audit' | 'proposal' | 'sow' | 'client' | 'engagement' | 'system' | 'integration' | 'tool';
+
+interface LogEntry {
+  id: string;
+  timestamp: Date | string;
+  level: LogLevel;
+  category: LogCategory;
+  message: string;
+  metadata?: any;
+}
 
 export default function LogsPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -17,10 +28,10 @@ export default function LogsPage() {
     search: '',
   });
   const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadLogs();
-    loadStats();
     
     // Refresh logs every 5 seconds
     const interval = setInterval(loadLogs, 5000);
@@ -31,13 +42,32 @@ export default function LogsPage() {
     applyFilters();
   }, [logs, filters]);
 
-  const loadLogs = () => {
-    const allLogs = logger.getLogs({ limit: 500 });
-    setLogs(allLogs);
+  const loadLogs = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/logs');
+      const data = await response.json();
+      
+      if (data.logs) {
+        const formattedLogs = data.logs.map((log: any) => ({
+          ...log,
+          timestamp: log.timestamp instanceof Date ? log.timestamp : new Date(log.timestamp),
+        }));
+        setLogs(formattedLogs);
+      }
+      
+      if (data.stats) {
+        setStats(data.stats);
+      }
+    } catch (error) {
+      console.error('Error loading logs:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const loadStats = () => {
-    setStats(logger.getStats());
+    // Stats are loaded with logs
   };
 
   const applyFilters = () => {
@@ -63,11 +93,14 @@ export default function LogsPage() {
     setFilteredLogs(filtered);
   };
 
-  const clearLogs = () => {
+  const clearLogs = async () => {
     if (confirm('Are you sure you want to clear all logs?')) {
-      logger.clearLogs();
-      loadLogs();
-      loadStats();
+      try {
+        await fetch('/api/logs', { method: 'DELETE' });
+        loadLogs();
+      } catch (error) {
+        console.error('Error clearing logs:', error);
+      }
     }
   };
 
@@ -238,7 +271,11 @@ export default function LogsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {filteredLogs.length === 0 ? (
+            {loading ? (
+              <div className="text-center py-12 text-slate-500">
+                <p>Loading logs...</p>
+              </div>
+            ) : filteredLogs.length === 0 ? (
               <div className="text-center py-12 text-slate-500">
                 <p>No logs found matching your filters.</p>
               </div>
@@ -260,7 +297,9 @@ export default function LogsPage() {
                             {log.category}
                           </Badge>
                           <span className="text-xs text-slate-500">
-                            {new Date(log.timestamp).toLocaleString()}
+                            {log.timestamp instanceof Date 
+                              ? log.timestamp.toLocaleString()
+                              : new Date(log.timestamp).toLocaleString()}
                           </span>
                         </div>
                         <p className="text-sm text-slate-300">{log.message}</p>

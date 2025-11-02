@@ -52,10 +52,55 @@ export default function IntegrationsPage() {
   const [integrationsState, setIntegrationsState] = useState<Integration[]>(integrations);
   const [selectedIntegration, setSelectedIntegration] = useState<Integration | null>(null);
   const [configValues, setConfigValues] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+
+  // Load saved config or defaults for Google Sheets
+  useEffect(() => {
+    loadGoogleSheetsConfig();
+  }, []);
+
+  const loadGoogleSheetsConfig = async () => {
+    try {
+      const response = await fetch('/api/integrations/configure?id=google-sheets');
+      const data = await response.json();
+      if (data.config && data.config.spreadsheetId) {
+        setConfigValues({
+          spreadsheetId: data.config.spreadsheetId,
+          sheetName: data.config.sheetName || 'RevOps Leads',
+          apiKey: data.config.apiKey || '',
+        });
+        // Update integration status if configured
+        setIntegrationsState((prev) =>
+          prev.map((int) =>
+            int.id === 'google-sheets'
+              ? { ...int, status: 'connected' as const, config: data.config }
+              : int
+          )
+        );
+      } else {
+        // Use defaults
+        setConfigValues({
+          spreadsheetId: '1mivnXalbpqnFyczpiWXy5KKB8oxCjyPrgn_t1OIZte4',
+          sheetName: 'RevOps Leads',
+        });
+      }
+    } catch (error) {
+      // Use defaults on error
+      setConfigValues({
+        spreadsheetId: '1mivnXalbpqnFyczpiWXy5KKB8oxCjyPrgn_t1OIZte4',
+        sheetName: 'RevOps Leads',
+      });
+    }
+  };
 
   const handleConfigure = (integration: Integration) => {
     setSelectedIntegration(integration);
-    setConfigValues(integration.config || {});
+    if (integration.id === 'google-sheets' && !configValues.spreadsheetId) {
+      // Load config if not already loaded
+      loadGoogleSheetsConfig();
+    } else {
+      setConfigValues(integration.config || configValues);
+    }
   };
 
   const handleSaveConfig = async (integrationId: string) => {
@@ -150,7 +195,7 @@ export default function IntegrationsPage() {
                           <>
                             <div>
                               <Label htmlFor="spreadsheet-id" className="text-slate-300">
-                                Spreadsheet ID
+                                Spreadsheet ID *
                               </Label>
                               <Input
                                 id="spreadsheet-id"
@@ -194,7 +239,18 @@ export default function IntegrationsPage() {
                                 placeholder="Google Sheets API Key"
                               />
                               <p className="text-xs text-slate-500 mt-1">
-                                For public sheets, API key is optional
+                                For public sheets, API key is optional. For private sheets, use service account credentials via environment variables.
+                              </p>
+                            </div>
+                            <div className="bg-slate-800 rounded-md p-3 mt-2">
+                              <p className="text-xs text-slate-400">
+                                <strong>Note:</strong> For production use with private sheets, set environment variables:
+                                <br />
+                                <code className="text-xs">GOOGLE_SHEETS_CLIENT_EMAIL</code>
+                                <br />
+                                <code className="text-xs">GOOGLE_SHEETS_PRIVATE_KEY</code>
+                                <br />
+                                These will be automatically detected if configured.
                               </p>
                             </div>
                           </>

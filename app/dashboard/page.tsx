@@ -11,9 +11,11 @@ import { ProjectRegistry } from '@/lib/services/project-registry';
 export default function DashboardPage() {
   const [skillsCount, setSkillsCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [integrationsStatus, setIntegrationsStatus] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     loadSkills();
+    loadIntegrationsStatus();
   }, []);
 
   const loadSkills = async () => {
@@ -24,6 +26,18 @@ export default function DashboardPage() {
       console.error('Error loading skills:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadIntegrationsStatus = async () => {
+    try {
+      const response = await fetch('/api/integrations/configure?id=google-sheets');
+      const data = await response.json();
+      if (data.configured) {
+        setIntegrationsStatus((prev) => ({ ...prev, 'google-sheets': true }));
+      }
+    } catch (err) {
+      // Silently fail
     }
   };
 
@@ -188,7 +202,12 @@ export default function DashboardPage() {
                 </Link>
                 <Link href="/integrations" className="block">
                   <Button className="w-full border-slate-700 text-slate-300 hover:bg-slate-800" variant="outline">
-                    Manage Integrations
+                    <span className="flex items-center justify-between w-full">
+                      <span>Manage Integrations</span>
+                      {integrationsStatus['google-sheets'] && (
+                        <Badge className="bg-green-600 text-white ml-2">Active</Badge>
+                      )}
+                    </span>
                   </Button>
                 </Link>
                 <Link href="/logs" className="block">

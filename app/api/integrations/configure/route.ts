@@ -52,9 +52,40 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const integrationId = searchParams.get('id');
 
+  // For Google Sheets, also check environment variables
+  if (integrationId === 'google-sheets') {
+    const envConfig: any = {};
+    
+    if (process.env.GOOGLE_SHEETS_SPREADSHEET_ID) {
+      envConfig.spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+      envConfig.sheetName = process.env.GOOGLE_SHEETS_SHEET_NAME || 'Sheet1';
+      
+      if (process.env.GOOGLE_SHEETS_API_KEY) {
+        envConfig.apiKey = process.env.GOOGLE_SHEETS_API_KEY;
+      }
+      
+      if (process.env.GOOGLE_SHEETS_CLIENT_EMAIL && process.env.GOOGLE_SHEETS_PRIVATE_KEY) {
+        envConfig.credentials = {
+          clientEmail: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
+          privateKey: process.env.GOOGLE_SHEETS_PRIVATE_KEY,
+        };
+        envConfig.serviceAccountConfigured = true;
+      }
+      
+      // Merge with any UI-configured values
+      const mergedConfig = { ...envConfig, ...integrationConfigs[integrationId] };
+      
+      return NextResponse.json({
+        config: mergedConfig,
+        configured: true,
+      });
+    }
+  }
+
   if (integrationId && integrationConfigs[integrationId]) {
     return NextResponse.json({
       config: integrationConfigs[integrationId],
+      configured: true,
     });
   }
 

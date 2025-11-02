@@ -61,7 +61,7 @@ class LoggingService {
       this.logs = this.logs.slice(-this.maxLogs);
     }
 
-    // Persist to localStorage
+    // Persist to localStorage (client-side)
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('entelech-platform-logs', JSON.stringify(this.logs));
@@ -69,6 +69,9 @@ class LoggingService {
         console.error('Error saving logs to storage:', e);
       }
     }
+
+    // Server-side logs are stored in this.logs and will be accessible via the API route
+    // The API route also maintains its own storage for persistence
 
     // Send to Google Sheets if configured
     if (this.googleSheetsEnabled && this.googleSheetsConfig) {
