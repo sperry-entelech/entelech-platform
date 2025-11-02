@@ -58,7 +58,9 @@ Return analysis in JSON format matching the output specification above.`;
     });
 
     const processingTime = (Date.now() - startTime) / 1000;
-    const analysis = JSON.parse(response.content[0].text);
+    const contentBlock = response.content[0];
+    const text = contentBlock.type === 'text' ? contentBlock.text : '';
+    const analysis = JSON.parse(text);
 
     return {
       agentName: 'Master Coordinator',
@@ -114,7 +116,9 @@ Return JSON with:
     });
 
     const processingTime = (Date.now() - startTime) / 1000;
-    const recommendations = JSON.parse(response.content[0].text);
+    const contentBlock = response.content[0];
+    const text = contentBlock.type === 'text' ? contentBlock.text : '';
+    const recommendations = JSON.parse(text);
 
     return {
       agentName: 'Solution Design',
@@ -169,7 +173,9 @@ Generate all training materials.`;
     });
 
     const processingTime = (Date.now() - startTime) / 1000;
-    const materials = JSON.parse(response.content[0].text);
+    const contentBlock = response.content[0];
+    const text = contentBlock.type === 'text' ? contentBlock.text : '';
+    const materials = JSON.parse(text);
 
     return {
       agentName: 'Client Enablement',
