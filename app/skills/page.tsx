@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { getAllSkills } from '@/lib/services/skills-factory';
-import { Search, Download, ExternalLink } from 'lucide-react';
+import { Search, Download, ExternalLink, Plus } from 'lucide-react';
 
 interface Skill {
   id: number;
@@ -64,9 +64,17 @@ export default function SkillsLibraryPage() {
   return (
     <div className="min-h-screen bg-slate-950">
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white">Skills Library</h1>
-          <p className="text-sm text-slate-400 mt-1">Browse and manage your Claude skills</p>
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white">Skills Library</h1>
+            <p className="text-sm text-slate-400 mt-1">Browse and manage your Claude skills</p>
+          </div>
+          <Link href="/skills/create">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Plus className="h-4 w-4 mr-2" />
+              Create Skill
+            </Button>
+          </Link>
         </div>
         {/* Search */}
         <div className="mb-6">
