@@ -192,6 +192,14 @@ export default function ProjectsPage() {
                           ))}
                         </div>
                         <div className="flex gap-2">
+                          {project.metadata?.internalUrl && (
+                            <Link href={project.metadata.internalUrl}>
+                              <Button variant="outline" size="sm" className="gap-2 border-slate-700 text-slate-300 hover:bg-slate-800">
+                                <Globe className="h-4 w-4" />
+                                Open
+                              </Button>
+                            </Link>
+                          )}
                           {project.githubRepo && (
                             <Link href={project.githubRepo} target="_blank" rel="noopener noreferrer">
                               <Button variant="outline" size="sm" className="gap-2 border-slate-700 text-slate-300 hover:bg-slate-800">

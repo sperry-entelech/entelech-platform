@@ -15,6 +15,7 @@ import {
   Activity,
   Link2,
   FileText,
+  TrendingUp,
 } from 'lucide-react';
 
 export function Navigation() {
@@ -45,6 +46,7 @@ export function Navigation() {
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/systems', label: 'Systems', icon: Building2 },
     { href: '/projects', label: 'Projects', icon: FolderKanban },
+    { href: '/campaigns', label: 'Campaigns', icon: TrendingUp },
     { href: '/tools', label: 'Tools', icon: Settings },
     { href: '/integrations', label: 'Integrations', icon: Link2 },
     { href: '/logs', label: 'Logs', icon: Activity },
