@@ -15,8 +15,25 @@ export default function AuthPage() {
   const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const { login, signup } = useAuth();
   const router = useRouter();
+
+  // Check for URL parameters (error, confirmed)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const errorParam = params.get('error');
+    const confirmedParam = params.get('confirmed');
+    
+    if (errorParam) {
+      setError(decodeURIComponent(errorParam));
+    }
+    
+    if (confirmedParam === 'true') {
+      setSuccess('Email confirmed! You can now log in.');
+      setIsSignup(false);
+    }
+  }, []);
 
   // Note: We can't check env vars directly in the browser, but we'll catch errors when trying to use Supabase
 
@@ -105,8 +122,13 @@ export default function AuthPage() {
               />
             </div>
             {error && (
-              <div className={`text-sm p-3 rounded ${error.includes('Check your email') ? 'bg-green-900/50 text-green-200 border border-green-700' : 'text-red-400 bg-red-900/50 border border-red-700'}`}>
+              <div className="text-sm p-3 rounded text-red-400 bg-red-900/50 border border-red-700">
                 {error}
+              </div>
+            )}
+            {success && (
+              <div className="text-sm p-3 rounded bg-green-900/50 text-green-200 border border-green-700">
+                {success}
               </div>
             )}
             <Button

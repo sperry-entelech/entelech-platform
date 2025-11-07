@@ -78,10 +78,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signup = async (email: string, password: string, name?: string) => {
     if (!supabase) throw new Error('Supabase client not initialized');
+    
+    // Get the current origin for redirect URL
+    const redirectUrl = typeof window !== 'undefined' 
+      ? `${window.location.origin}/auth/callback`
+      : '/auth/callback';
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: redirectUrl,
         data: {
           name: name || email.split('@')[0],
         },
