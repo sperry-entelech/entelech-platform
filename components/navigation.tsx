@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/lib/contexts/auth-context';
 import {
   LayoutDashboard,
   BookOpen,
@@ -16,10 +17,13 @@ import {
   Link2,
   FileText,
   TrendingUp,
+  GitBranch,
+  LogOut,
 } from 'lucide-react';
 
 export function Navigation() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   const corePlatformItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -48,6 +52,7 @@ export function Navigation() {
     { href: '/projects', label: 'Projects', icon: FolderKanban },
     { href: '/campaigns', label: 'Campaigns', icon: TrendingUp },
     { href: '/tools', label: 'Tools', icon: Settings },
+    { href: '/context', label: 'Context', icon: GitBranch },
     { href: '/integrations', label: 'Integrations', icon: Link2 },
     { href: '/logs', label: 'Logs', icon: Activity },
     { href: '/skills', label: 'Skills', icon: BookOpen },
@@ -84,6 +89,25 @@ export function Navigation() {
                 </Link>
               );
             })}
+            {user ? (
+              <Button
+                variant="ghost"
+                onClick={logout}
+                className="text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            ) : (
+              <Link href="/auth">
+                <Button
+                  variant="ghost"
+                  className="text-slate-300 hover:text-white hover:bg-slate-800"
+                >
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

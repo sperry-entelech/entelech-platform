@@ -39,8 +39,10 @@ export interface EntelechProject {
   metadata?: {
     deploymentUrl?: string;
     documentationUrl?: string;
+    internalUrl?: string;
     lastUpdated?: string;
     maintainer?: string;
+    notes?: string;
   };
 }
 
@@ -75,4 +77,5 @@ export const AGENCY_SYSTEM_CATEGORIES: Record<SystemCategory, string> = {
   tool: 'Tools & Utilities',
   documentation: 'Documentation & Knowledge Base',
 };
+
 

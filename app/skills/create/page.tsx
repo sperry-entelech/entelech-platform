@@ -56,23 +56,110 @@ interface GeneratedSkill {
 export default function CreateSkillPage() {
   const [step, setStep] = useState<Step>('input');
   const [content, setContent] = useState('');
-  const [contentType, setContentType] = useState<ContentType>('copywriting');
+  const [contentType, setContentType] = useState<ContentType>('process');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [skillName, setSkillName] = useState('');
   const [description, setDescription] = useState('');
   const [tagsInput, setTagsInput] = useState('');
   const [generatedSkill, setGeneratedSkill] = useState<GeneratedSkill | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkFiles, setBulkFiles] = useState<Array<{ name: string; content: string; type: ContentType }>>([]);
 
+  // Content type helper descriptions
+  const contentTypeHelpers = {
+    copywriting: 'Sales copy, email sequences, marketing frameworks',
+    process: 'Business processes, workflows, step-by-step procedures',
+    technical: 'Code patterns, technical specifications, development guides',
+  };
+
+  const getContentTypeDescription = (type: ContentType) => {
+    return contentTypeHelpers[type];
+  };
+
+  // Format skill name to lowercase with hyphens
+  const formatSkillName = (name: string): string => {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+  };
+
+  // Validation functions
+  const validateSkillName = (name: string): string | null => {
+    if (!name.trim()) {
+      return 'Skill name is required';
+    }
+    if (name.trim().length < 3) {
+      return 'Skill name must be at least 3 characters';
+    }
+    const validFormat = /^[a-z0-9-]+$/.test(name.trim());
+    if (!validFormat) {
+      return 'Skill name must be lowercase with hyphens only (e.g., self-iterating-documentation-agent)';
+    }
+    return null;
+  };
+
+  const validateContent = (content: string): string | null => {
+    if (!content.trim()) {
+      return 'Content is required';
+    }
+    if (content.trim().length < 100) {
+      return `Content must be at least 100 characters (currently ${content.trim().length})`;
+    }
+    return null;
+  };
+
+  const validateTags = (tags: string): string | null => {
+    if (!tags.trim()) return null;
+    const tagArray = tags.split(',').map(t => t.trim()).filter(t => t.length > 0);
+    const invalidTags = tagArray.filter(t => !/^[a-z0-9-]+$/i.test(t));
+    if (invalidTags.length > 0) {
+      return `Invalid tags: ${invalidTags.join(', ')}. Use alphanumeric characters and hyphens only.`;
+    }
+    return null;
+  };
+
+  // Real-time validation handlers
+  const handleSkillNameChange = (value: string) => {
+    setSkillName(value);
+    const error = validateSkillName(value);
+    setValidationErrors(prev => ({
+      ...prev,
+      skillName: error || '',
+    }));
+  };
+
+  const handleContentChange = (value: string) => {
+    setContent(value);
+    const error = validateContent(value);
+    setValidationErrors(prev => ({
+      ...prev,
+      content: error || '',
+    }));
+  };
+
+  const handleTagsChange = (value: string) => {
+    setTagsInput(value);
+    const error = validateTags(value);
+    setValidationErrors(prev => ({
+      ...prev,
+      tags: error || '',
+    }));
+  };
+
   const handleAnalyze = async () => {
-    if (!content.trim() || content.trim().length < 10) {
-      setError('Please enter at least 10 characters of content');
+    const contentError = validateContent(content);
+    if (contentError) {
+      setError(contentError);
+      setValidationErrors(prev => ({ ...prev, content: contentError }));
       return;
     }
 
     setError(null);
+    setValidationErrors({});
     setStep('analyzing');
 
     try {
@@ -101,12 +188,23 @@ export default function CreateSkillPage() {
 
   const handleGenerateSkill = async () => {
     if (!analysisResult) return;
-    if (!skillName.trim() || skillName.trim().length < 3) {
-      setError('Please enter a skill name (at least 3 characters)');
+    
+    const skillNameError = validateSkillName(skillName);
+    if (skillNameError) {
+      setError(skillNameError);
+      setValidationErrors(prev => ({ ...prev, skillName: skillNameError }));
+      return;
+    }
+
+    const tagsError = validateTags(tagsInput);
+    if (tagsError) {
+      setError(tagsError);
+      setValidationErrors(prev => ({ ...prev, tags: tagsError }));
       return;
     }
 
     setError(null);
+    setValidationErrors({});
     setStep('generating');
 
     try {
@@ -149,25 +247,15 @@ export default function CreateSkillPage() {
 
   const handleReset = () => {
     setContent('');
-    setContentType('copywriting');
+    setContentType('process');
     setAnalysisResult(null);
     setSkillName('');
     setDescription('');
     setTagsInput('');
     setGeneratedSkill(null);
     setError(null);
+    setValidationErrors({});
     setStep('input');
-  };
-
-  const getContentTypeDescription = (type: ContentType) => {
-    switch (type) {
-      case 'copywriting':
-        return 'Marketing copy, sales pages, email templates, social media posts';
-      case 'process':
-        return 'Business processes, workflows, SOPs, methodologies';
-      case 'technical':
-        return 'Code patterns, architecture, technical documentation, APIs';
-    }
   };
 
   return (
@@ -192,10 +280,10 @@ export default function CreateSkillPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2">
             {[
-              { step: 'input', label: 'Content' },
-              { step: 'preview', label: 'Analysis' },
+              { step: 'input', label: 'Configure' },
+              { step: 'preview', label: 'Analyze' },
               { step: 'generating', label: 'Generate' },
-              { step: 'complete', label: 'Complete' },
+              { step: 'complete', label: 'Download' },
             ].map((s, idx) => {
               const stepOrder = ['input', 'preview', 'generating', 'complete'];
               const currentIdx = stepOrder.indexOf(step);
@@ -289,7 +377,7 @@ export default function CreateSkillPage() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <Label htmlFor="content" className="text-slate-300">
-                    Content
+                    Content *
                   </Label>
                   <Button
                     type="button"
@@ -316,15 +404,30 @@ export default function CreateSkillPage() {
                   <>
                     <Textarea
                       id="content"
-                      placeholder="Paste your content here... (documents, processes, copywriting, code, etc.)"
+                      placeholder="Paste your process documentation, copywriting framework, or technical specification here..."
                       value={content}
-                      onChange={(e) => setContent(e.target.value)}
+                      onChange={(e) => handleContentChange(e.target.value)}
                       rows={12}
-                      className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 font-mono text-sm"
+                      className={`bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 font-mono text-sm ${
+                        validationErrors.content ? 'border-red-500' : ''
+                      }`}
+                      required
                     />
-                    <p className="text-xs text-slate-500 mt-2">
-                      {content.length} characters (minimum 10 required)
-                    </p>
+                    <div className="flex items-center justify-between mt-2">
+                      <p className={`text-xs ${
+                        content.trim().length < 100 
+                          ? 'text-yellow-500' 
+                          : validationErrors.content 
+                          ? 'text-red-400' 
+                          : 'text-slate-500'
+                      }`}>
+                        {content.trim().length} / 100 characters (minimum recommended)
+                        {validationErrors.content && ` • ${validationErrors.content}`}
+                      </p>
+                      {content.trim().length >= 100 && (
+                        <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      )}
+                    </div>
                   </>
                 ) : (
                   <div className="space-y-4">
@@ -350,8 +453,8 @@ export default function CreateSkillPage() {
 
               <Button
                 onClick={handleAnalyze}
-                disabled={!content.trim() || content.trim().length < 10}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={!content.trim() || content.trim().length < 100 || !!validationErrors.content}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                 size="lg"
               >
                 <Sparkles className="h-4 w-4 mr-2" />
@@ -427,14 +530,27 @@ export default function CreateSkillPage() {
                   </Label>
                   <Input
                     id="skillName"
-                    placeholder="e.g., enterprise-proposal-framework"
+                    placeholder="e.g., self-iterating-documentation-agent"
                     value={skillName}
-                    onChange={(e) => setSkillName(e.target.value)}
-                    className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                    onChange={(e) => {
+                      const formatted = formatSkillName(e.target.value);
+                      handleSkillNameChange(formatted);
+                    }}
+                    className={`bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 ${
+                      validationErrors.skillName ? 'border-red-500' : ''
+                    }`}
+                    required
                   />
-                  <p className="text-xs text-slate-500 mt-1">
-                    Use lowercase with hyphens (will be formatted automatically)
-                  </p>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className={`text-xs ${
+                      validationErrors.skillName ? 'text-red-400' : 'text-slate-500'
+                    }`}>
+                      {validationErrors.skillName || 'Use lowercase with hyphens (auto-formatted)'}
+                    </p>
+                    {skillName && !validationErrors.skillName && (
+                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -457,14 +573,23 @@ export default function CreateSkillPage() {
                   </Label>
                   <Input
                     id="tags"
-                    placeholder="sales, proposals, enterprise (comma-separated)"
+                    placeholder="documentation, automation, process (comma-separated)"
                     value={tagsInput}
-                    onChange={(e) => setTagsInput(e.target.value)}
-                    className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                    onChange={(e) => handleTagsChange(e.target.value)}
+                    className={`bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 ${
+                      validationErrors.tags ? 'border-red-500' : ''
+                    }`}
                   />
-                  <p className="text-xs text-slate-500 mt-1">
-                    Comma-separated tags for organization and search
-                  </p>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className={`text-xs ${
+                      validationErrors.tags ? 'text-red-400' : 'text-slate-500'
+                    }`}>
+                      {validationErrors.tags || 'Comma-separated tags for organization and search'}
+                    </p>
+                    {tagsInput && !validationErrors.tags && (
+                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex gap-3">
@@ -478,8 +603,8 @@ export default function CreateSkillPage() {
                   </Button>
                   <Button
                     onClick={handleGenerateSkill}
-                    disabled={!skillName.trim() || skillName.trim().length < 3}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    disabled={!skillName.trim() || !!validationErrors.skillName || !!validationErrors.tags}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     size="lg"
                   >
                     <Sparkles className="h-4 w-4 mr-2" />
