@@ -52,7 +52,7 @@ export function Navigation() {
     { href: '/projects', label: 'Projects', icon: FolderKanban },
     { href: '/campaigns', label: 'Campaigns', icon: TrendingUp },
     { href: '/tools', label: 'Tools', icon: Settings },
-    { href: '/context', label: 'Context', icon: GitBranch },
+    { href: '/context', label: 'Temporal Intelligence', icon: GitBranch },
     { href: '/integrations', label: 'Integrations', icon: Link2 },
     { href: '/logs', label: 'Logs', icon: Activity },
     { href: '/skills', label: 'Skills', icon: BookOpen },

@@ -160,7 +160,7 @@ export default function ContextVersionControlPage() {
     return (
       <div className="container mx-auto p-6">
         <div className="text-center py-12">
-          <h1 className="text-3xl font-bold text-white mb-4">Context Version Control</h1>
+          <h1 className="text-3xl font-bold text-white mb-4">Temporal Intelligence</h1>
           <p className="text-slate-400 mb-6">Please log in to access your business context</p>
           <a href="/auth">
             <Button>Go to Login</Button>
@@ -174,8 +174,8 @@ export default function ContextVersionControlPage() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Context Version Control</h1>
-          <p className="text-slate-400">Git for your business context - track changes over time</p>
+          <h1 className="text-3xl font-bold text-white mb-2">Temporal Intelligence</h1>
+          <p className="text-slate-400">Context Version Control - Git for your business context</p>
         </div>
         <Button
           onClick={() => setShowCommitForm(!showCommitForm)}
