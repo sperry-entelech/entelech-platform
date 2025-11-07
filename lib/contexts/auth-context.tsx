@@ -24,12 +24,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const getSupabaseClient = () => {
     try {
       return createClient();
-    } catch {
+    } catch (error: any) {
+      console.error('[Auth] Failed to initialize Supabase:', error.message);
       return null;
     }
   };
   
   const supabase = getSupabaseClient();
+  
+  // Log client status for debugging
+  useEffect(() => {
+    if (!supabase) {
+      console.warn('[Auth] Supabase client not available. Check environment variables.');
+    }
+  }, [supabase]);
 
   useEffect(() => {
     if (!supabase) {

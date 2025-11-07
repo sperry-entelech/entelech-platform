@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/contexts/auth-context';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,8 @@ export default function AuthPage() {
   const [error, setError] = useState('');
   const { login, signup } = useAuth();
   const router = useRouter();
+
+  // Note: We can't check env vars directly in the browser, but we'll catch errors when trying to use Supabase
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +39,22 @@ export default function AuthPage() {
         router.push('/context');
       }
     } catch (err: any) {
-      setError(err.message || 'Authentication failed');
+      let errorMessage = err.message || 'Authentication failed';
+      
+      // Provide helpful error messages for common issues
+      if (errorMessage.includes('Supabase client not initialized') || 
+          errorMessage.includes('Supabase configuration missing')) {
+        errorMessage = 'Supabase is not configured. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in Vercel environment variables and redeploy.';
+      } else if (errorMessage.includes('Invalid login credentials')) {
+        errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+      } else if (errorMessage.includes('User already registered')) {
+        errorMessage = 'An account with this email already exists. Please log in instead.';
+      } else if (errorMessage.includes('Email not confirmed')) {
+        errorMessage = 'Please check your email and click the confirmation link before logging in.';
+      }
+      
+      setError(errorMessage);
+      console.error('Auth error:', err);
     } finally {
       setLoading(false);
     }

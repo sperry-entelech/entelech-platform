@@ -102,11 +102,22 @@ export default function ContextVersionControlPage() {
     try {
       let parsedValue: any = fieldValue;
       if (fieldType === 'json') {
-        parsedValue = JSON.parse(fieldValue);
+        try {
+          parsedValue = JSON.parse(fieldValue);
+        } catch (parseError) {
+          setError('Invalid JSON format. Please check your JSON syntax.');
+          setLoading(false);
+          return;
+        }
       } else if (fieldType === 'number') {
         parsedValue = Number(fieldValue);
+        if (isNaN(parsedValue)) {
+          setError('Invalid number format');
+          setLoading(false);
+          return;
+        }
       } else if (fieldType === 'boolean') {
-        parsedValue = fieldValue === 'true';
+        parsedValue = fieldValue === 'true' || fieldValue === '1';
       } else if (fieldType === 'array') {
         parsedValue = fieldValue.split(',').map(s => s.trim());
       }
@@ -129,14 +140,27 @@ export default function ContextVersionControlPage() {
       setCommitMessage('');
       setFieldName('');
       setFieldValue('');
+      setFieldType('text');
       setShowCommitForm(false);
 
       // Reload data
       await loadCurrentContext();
       await loadHistory();
+      
+      // Clear any previous errors
+      setError(null);
     } catch (err: any) {
-      setError(err.message || 'Failed to create commit');
-      console.error('Error creating commit:', err);
+      let errorMessage = err.message || 'Failed to create commit';
+      
+      // Provide helpful error messages
+      if (errorMessage.includes('Context VC API error')) {
+        errorMessage = `Context Version Control API error: ${errorMessage}`;
+      } else if (errorMessage.includes('Failed to fetch') || errorMessage.includes('Network')) {
+        errorMessage = 'Cannot connect to Context Version Control service. Please check that NEXT_PUBLIC_CONTEXT_VERSION_CONTROL_URL is set correctly in Vercel.';
+      }
+      
+      setError(errorMessage);
+      console.error('Commit failed:', err);
     } finally {
       setLoading(false);
     }
