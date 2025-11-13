@@ -75,3 +75,5 @@ After making changes in Supabase:
 - Verify the Site URL doesn't have a trailing slash
 - Check that redirect URLs are correctly configured
 
+
+
