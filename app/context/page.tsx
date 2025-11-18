@@ -199,14 +199,14 @@ export default function ContextVersionControlPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">Temporal Intelligence</h1>
-          <p className="text-slate-400">Context Version Control - Git for your business context</p>
+          <p className="text-slate-400">Track your business evolution over time</p>
         </div>
         <Button
           onClick={() => setShowCommitForm(!showCommitForm)}
           className="flex items-center gap-2"
         >
           <Plus className="h-4 w-4" />
-          New Commit
+          Save Update
         </Button>
       </div>
 
@@ -235,33 +235,33 @@ export default function ContextVersionControlPage() {
       {showCommitForm && (
         <Card className="bg-slate-800 border-slate-700">
           <CardHeader>
-            <CardTitle>Create New Commit</CardTitle>
-            <CardDescription>Track a change to your business context</CardDescription>
+            <CardTitle>Save Business Update</CardTitle>
+            <CardDescription>Record what changed in your business</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="commit-message">Commit Message *</Label>
+              <Label htmlFor="commit-message">What changed? *</Label>
               <Input
                 id="commit-message"
                 value={commitMessage}
                 onChange={(e) => setCommitMessage(e.target.value)}
-                placeholder="e.g., Updated ICP to focus on SMB manufacturers"
+                placeholder="e.g., Refined our target market to focus on B2B service businesses"
                 className="bg-slate-900 border-slate-700"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="field-name">Field Name *</Label>
+                <Label htmlFor="field-name">What are you updating? *</Label>
                 <Input
                   id="field-name"
                   value={fieldName}
                   onChange={(e) => setFieldName(e.target.value)}
-                  placeholder="e.g., icp, positioning, current_focus"
+                  placeholder="e.g., target_market, positioning, focus_area"
                   className="bg-slate-900 border-slate-700"
                 />
               </div>
               <div>
-                <Label htmlFor="field-type">Field Type *</Label>
+                <Label htmlFor="field-type">Data type *</Label>
                 <select
                   id="field-type"
                   value={fieldType}
@@ -278,12 +278,12 @@ export default function ContextVersionControlPage() {
               </div>
             </div>
             <div>
-              <Label htmlFor="field-value">Field Value *</Label>
+              <Label htmlFor="field-value">New value *</Label>
               <Textarea
                 id="field-value"
                 value={fieldValue}
                 onChange={(e) => setFieldValue(e.target.value)}
-                placeholder={fieldType === 'json' ? '{"key": "value"}' : fieldType === 'array' ? 'item1, item2, item3' : 'Enter value'}
+                placeholder={fieldType === 'json' ? '{"target": "B2B service businesses", "size": "SMB"}' : fieldType === 'array' ? 'value1, value2, value3' : 'Enter the new value'}
                 rows={fieldType === 'json' ? 6 : 3}
                 className="bg-slate-900 border-slate-700 font-mono"
               />
@@ -291,7 +291,7 @@ export default function ContextVersionControlPage() {
             <div className="flex gap-2">
               <Button onClick={handleCommit} disabled={loading} className="flex items-center gap-2">
                 <Save className="h-4 w-4" />
-                {loading ? 'Creating...' : 'Create Commit'}
+                {loading ? 'Saving...' : 'Save Update'}
               </Button>
               <Button
                 variant="outline"
@@ -330,8 +330,16 @@ export default function ContextVersionControlPage() {
               <div className="space-y-4">
                 {currentContext.version && (
                   <div className="text-sm">
-                    <div className="text-slate-400 mb-2">Version: {currentContext.version.hash?.substring(0, 7) || 'N/A'}</div>
-                    <div className="text-slate-300">{currentContext.version.message}</div>
+                    <div className="text-white font-medium mb-2">{currentContext.version.message}</div>
+                    <div className="text-slate-400 text-xs">
+                      {new Date(currentContext.version.created_at).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit'
+                      })} • Version {currentContext.version.hash?.substring(0, 7) || 'N/A'}
+                    </div>
                   </div>
                 )}
                 {Object.keys(currentContext.state || {}).length > 0 ? (
@@ -354,7 +362,7 @@ export default function ContextVersionControlPage() {
                   </div>
                 ) : (
                   <div className="text-slate-400 text-center py-8">
-                    No context yet. Create your first commit!
+                    No updates yet. Save your first business update to start tracking changes.
                   </div>
                 )}
               </div>
@@ -414,9 +422,9 @@ export default function ContextVersionControlPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <History className="h-5 w-5" />
-            Version History
+            Update History
           </CardTitle>
-          <CardDescription>All commits to your business context</CardDescription>
+          <CardDescription>Timeline of changes to your business</CardDescription>
         </CardHeader>
         <CardContent>
           {history.length > 0 ? (
@@ -454,7 +462,7 @@ export default function ContextVersionControlPage() {
             </div>
           ) : (
             <div className="text-slate-400 text-center py-8">
-              No history yet. Create your first commit!
+              No history yet. Save your first update to begin tracking your business evolution.
             </div>
           )}
         </CardContent>

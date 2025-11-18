@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 export default function PortfolioPage() {
   const [modalContent, setModalContent] = useState<{title: string, content: string, type: string} | null>(null);
@@ -489,9 +490,14 @@ Talk soon,
             cursor: pointer; font-size: 1.5rem; transition: all 0.2s; }
           .modal-close:hover { background: var(--border); }
           .modal-title { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
-          .modal-body { color: var(--text-secondary); line-height: 1.8; white-space: pre-wrap; }
-          .modal-body strong { color: var(--text-primary); }
+          .modal-body { color: var(--text-secondary); line-height: 1.8; }
+          .modal-body strong { color: var(--text-primary); font-weight: 600; }
           .modal-body p { margin-bottom: 1rem; }
+          .modal-body ul, .modal-body ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+          .modal-body li { margin-bottom: 0.5rem; }
+          .modal-body h3 { color: var(--text-primary); font-size: 1.2rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+          .modal-body hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+          .modal-body code { background: var(--bg-hover); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; }
 
           @keyframes fadeIn { to { opacity: 1; } }
           @keyframes slideIn { to { transform: scale(1); opacity: 1; } }
@@ -712,7 +718,9 @@ Talk soon,
               <div style={{ marginBottom: '1.5rem' }}>
                 <span className={`sample-type ${modalContent.type === 'Client Work' ? 'client' : ''}`}>{modalContent.type}</span>
               </div>
-              <div className="modal-body">{modalContent.content}</div>
+              <div className="modal-body">
+                <ReactMarkdown>{modalContent.content}</ReactMarkdown>
+              </div>
             </div>
           </div>
         )}
