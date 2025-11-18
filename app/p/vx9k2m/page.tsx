@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Sperry Entelech - Portfolio',
+  title: 'Ethan Sperry - Portfolio',
   robots: 'noindex, nofollow',
 };
 
@@ -39,13 +39,6 @@ export default function PortfolioPage() {
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
           .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; }
 
-          .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem; margin-bottom: 4rem; padding: 2rem; background: var(--bg-secondary);
-            border: 1px solid var(--border); border-radius: 12px; }
-          .stat { text-align: center; }
-          .stat-value { font-size: 2rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; }
-          .stat-label { font-size: 0.9rem; color: var(--text-muted); }
-
           .section { margin-bottom: 4rem; }
           .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
             padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
@@ -78,14 +71,13 @@ export default function PortfolioPage() {
           @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             nav .links { gap: 1rem; font-size: 0.85rem; }
-            .stats { grid-template-columns: 1fr; }
           }
         ` }} />
       </head>
       <body>
         <nav>
           <div className="container">
-            <div className="logo">Sperry Entelech</div>
+            <div className="logo">Ethan Sperry</div>
             <div className="links">
               <a href="#email">Email Copy</a>
               <a href="#projects">Projects</a>
@@ -96,16 +88,10 @@ export default function PortfolioPage() {
 
         <main>
           <section className="hero">
-            <h1>Conversion Copywriting<br />& Technical Development</h1>
-            <p>Email sequences, landing pages, and full-stack applications. Consulting for TNT Transportation on automation and implementation.</p>
+            <h1>Frontend Development<br />Growth Ops Consulting<br />Copywriting</h1>
+            <p>Technical implementation, growth operations, and conversion-focused copy. Consulting for TNT Transportation on automation and full-stack systems.</p>
           </section>
 
-          <div className="stats">
-            <div className="stat"><div className="stat-value">53%</div><div className="stat-label">Open Rate (Day 1)</div></div>
-            <div className="stat"><div className="stat-value">40+</div><div className="stat-label">GitHub Repos</div></div>
-            <div className="stat"><div className="stat-value">TNT</div><div className="stat-label">Active Client</div></div>
-            <div className="stat"><div className="stat-value">9</div><div className="stat-label">Email Samples</div></div>
-          </div>
 
           <section id="email" className="section">
             <div className="section-header"><h2>Email Copywriting</h2><span className="section-badge">9 samples</span></div>
@@ -319,7 +305,7 @@ export default function PortfolioPage() {
             Client work results are verified (TNT Transportation consulting, 53% open rate on 300-recipient newsletter).
             Technical projects range from production code to MVPs and demos. Some projects are works in progress.
           </div>
-          <p style={{ marginTop: '2rem' }}>Sperry Entelech · sperry@entelech.net</p>
+          <p style={{ marginTop: '2rem' }}>Ethan Sperry · sperry@entelech.net</p>
           <p style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>
             <a href="https://github.com/sperry-entelech" target="_blank" rel="noopener" style={{ color: 'var(--accent)', textDecoration: 'none' }}>GitHub</a>
           </p>
