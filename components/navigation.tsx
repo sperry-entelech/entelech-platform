@@ -19,6 +19,7 @@ import {
   TrendingUp,
   GitBranch,
   LogOut,
+  Mail,
 } from 'lucide-react';
 
 export function Navigation() {
@@ -51,6 +52,7 @@ export function Navigation() {
     { href: '/systems', label: 'Systems', icon: Building2 },
     { href: '/projects', label: 'Projects', icon: FolderKanban },
     { href: '/campaigns', label: 'Campaigns', icon: TrendingUp },
+    { href: '/outbound', label: 'Outbound', icon: Mail },
     { href: '/tools', label: 'Tools', icon: Settings },
     { href: '/context', label: 'Temporal Intelligence', icon: GitBranch },
     { href: '/integrations', label: 'Integrations', icon: Link2 },
