@@ -5,6 +5,165 @@ import ReactMarkdown from 'react-markdown';
 
 export default function PortfolioPage() {
   const [modalContent, setModalContent] = useState<{title: string, content: string, type: string} | null>(null);
+  const [activeTab, setActiveTab] = useState<'cases' | 'copy' | 'projects'>('cases');
+
+  const caseStudies = {
+    tnt2026: {
+      title: "TNT Transportation: 2026 Corporate Outreach System",
+      type: "Active Client",
+      status: "In Development",
+      description: "B2B cold email system targeting corporate fleet accounts with $5-30K+ lifetime value.",
+      tags: ["Cold Email", "B2B", "Corporate Accounts", "Automation"],
+      metrics: [
+        { label: "Monthly Email Volume", value: "500-1,000", sublabel: "Corporate targets" },
+        { label: "Account LTV", value: "$5-30K+", sublabel: "Per corporate account" },
+        { label: "Current Retainer", value: "$2.2K/mo", sublabel: "Consulting + implementation" }
+      ],
+      content: `## Project Overview
+
+Building a comprehensive B2B cold email system for TNT Transportation to acquire corporate fleet accounts and rental partnerships.
+
+### The Opportunity
+
+TNT Transportation currently relies on referrals and existing relationships for corporate business. The 2026 initiative changes this with systematic outreach to:
+
+- **Corporate fleet managers** at mid-size companies needing transportation for events, retreats, and regular employee transport
+- **Event planners** at hotels, convention centers, and corporate campuses
+- **HR departments** coordinating employee transportation programs
+- **Construction companies** needing crew transportation to job sites
+
+### System Architecture
+
+**Targeting & Segmentation:**
+- Industry-specific lists (construction, corporate events, hospitality)
+- Geographic targeting (DC metro, Richmond, Hampton Roads corridors)
+- Company size filtering ($5M-$500M revenue sweet spot)
+
+**Email Infrastructure:**
+- Warmed sending domains with proper authentication (SPF, DKIM, DMARC)
+- Rotation across multiple domains for volume
+- Deliverability monitoring and reputation management
+
+**Sequence Strategy:**
+- 4-touch sequences with behavioral triggers
+- Industry-specific value propositions
+- Relationship-first positioning (not hard sell)
+- Direct booking calendar integration
+
+### Projected Impact
+
+At 500-1,000 emails/month with conservative 2% positive response rate:
+- **10-20 qualified conversations/month**
+- **2-4 new corporate accounts/month** (20% close rate on qualified)
+- **$10K-$120K new annual revenue** (at $5-30K LTV)
+
+This builds a predictable pipeline that compounds—each corporate account generates referrals and repeat business.
+
+### Current Status
+
+- ✅ Email infrastructure setup complete
+- ✅ Initial targeting criteria defined
+- 🔄 Sequence copy in development
+- 🔄 CRM integration (n8n + Supabase)
+- ⏳ Launch: Q1 2026`
+    },
+    constructionBids: {
+      title: "Construction Bids AI: Cold Email System",
+      type: "Dev Partner",
+      status: "Production",
+      description: "Built the cold email automation system for construction industry lead generation.",
+      tags: ["AI", "Cold Email", "Construction", "Lead Gen"],
+      metrics: [
+        { label: "Industry", value: "Construction", sublabel: "General contractors & subs" },
+        { label: "System Type", value: "AI-Powered", sublabel: "Intelligent lead scoring" },
+        { label: "Role", value: "Dev Partner", sublabel: "Built email infrastructure" }
+      ],
+      content: `## Technical Implementation
+
+Developed the cold email automation infrastructure for Construction Bids AI, an AI-powered platform helping contractors find and win more bids.
+
+### What I Built
+
+**Email Automation Engine:**
+- Multi-domain sending infrastructure with rotation
+- Deliverability optimization (warming, authentication, reputation)
+- Behavioral trigger sequences based on engagement
+- A/B testing framework for subject lines and copy
+
+**Integration Layer:**
+- Connected AI lead scoring to email sequencing
+- Real-time webhook processing for engagement events
+- CRM sync for sales team handoff
+- Analytics dashboard for campaign performance
+
+**Sequence Architecture:**
+- Industry-specific templates (GCs, subcontractors, specialty trades)
+- Geographic personalization
+- Project-type targeting
+- Follow-up automation based on open/click behavior
+
+### Results
+
+The system enables Construction Bids AI to:
+- Send thousands of targeted emails monthly
+- Maintain high deliverability (no spam folder issues)
+- Track engagement through to closed deals
+- Scale outreach without manual effort
+
+### Tech Stack
+
+- n8n for workflow automation
+- Instantly/Smartlead for sending infrastructure
+- Supabase for data layer
+- Custom analytics dashboard`
+    },
+    tntNewsletter: {
+      title: "TNT Transportation: Corporate Newsletter",
+      type: "Active Client",
+      status: "Delivered",
+      description: "B2B relationship marketing newsletter achieving 53% open rate on Day 1.",
+      tags: ["B2B", "Newsletter", "Transportation", "Retention"],
+      metrics: [
+        { label: "Open Rate", value: "53%", sublabel: "Day 1" },
+        { label: "Recipients", value: "300+", sublabel: "Corporate contacts" },
+        { label: "Campaign Type", value: "Retention", sublabel: "Relationship marketing" }
+      ],
+      content: `## Campaign Overview
+
+Holiday-themed B2B newsletter sent to TNT Transportation's existing corporate customer base.
+
+### Objective
+
+Strengthen relationships with existing corporate accounts through value-add content and seasonal touchpoints. Not a sales push—pure relationship marketing.
+
+### Strategy
+
+**Audience Segmentation:**
+- Active corporate accounts (past 12 months)
+- Lapsed accounts with reactivation potential
+- VIP accounts with high lifetime value
+
+**Content Approach:**
+- Holiday greetings with personal touch
+- Company updates and fleet news
+- Appreciation messaging for continued partnership
+- Soft mention of seasonal services
+
+### Results
+
+**53% open rate on Day 1**—significantly above industry average (21% for transportation/logistics).
+
+This validates:
+- Clean, engaged email list
+- Strong sender reputation
+- Compelling subject line copy
+- Genuine relationship with customer base
+
+### Takeaways
+
+The high engagement rate demonstrates that TNT's corporate customers are receptive to email communication. This creates the foundation for the 2026 cold email system—if warm contacts engage at 53%, cold outreach with proper targeting should perform well above industry benchmarks.`
+    }
+  };
 
   const emailSamples = {
     medical: {
@@ -32,9 +191,9 @@ Our system helps private practices establish a sustainable patient acquisition f
 
 **What makes our approach effective:**
 
-• Streamlining your intake processes and follow-up communications
-• Creating predictable lead generation with comprehensive tracking
-• Training your team to convert inquiries efficiently without constant oversight
+- Streamlining your intake processes and follow-up communications
+- Creating predictable lead generation with comprehensive tracking
+- Training your team to convert inquiries efficiently without constant oversight
 
 This isn't simply another marketing package—it's a comprehensive system designed to help scale your practice while giving you back valuable time.
 
@@ -46,35 +205,6 @@ Warm regards,
 [Your Name]
 
 **P.S.** Many practices we support see meaningful improvements within 30 days, including a significant increase in qualified patients without additional work hours. If practice growth is a priority for you, we'd welcome a conversation.`
-    },
-    partnership: {
-      title: "B2B Partnership Outreach",
-      type: "Practice",
-      description: "Collaborative positioning for agency partnerships. Clear value prop with specific benefits.",
-      tags: ["B2B", "Partnership", "Agency"],
-      content: `**Subject Line:** Organic lead gen + paid ads: Partnership opportunity
-
-Hi [Name],
-
-Your impressive [specific campaign] caught my attention, particularly how you [specific achievement with paid ads]. Your paid expertise perfectly complements our organic lead generation focus at [Your Agency Name].
-
-We help B2B companies in [industry] build sustainable organic pipelines, and partnerships with specialized paid agencies have delivered powerful results for shared clients:
-
-• Expanded service offerings without additional overhead
-• Complete solutions combining paid + organic strategies
-• Mutual referral opportunities for ideal-fit clients
-
-Our recent collaboration with a company like yours increased qualified leads by 30% for shared clients through aligned paid and organic strategies.
-
-Could we discuss potential synergies in a 15-minute call next week?
-
-Book here: [Calendar link] or suggest a time that works for you.
-
-Looking forward to exploring collaboration,
-
-[Your Name]
-[Your Agency Name]
-[Contact Information]`
     },
     growth: {
       title: "Growth Operations Email",
@@ -91,10 +221,10 @@ If you're a service business owner bringing in $5-10K per month and feeling like
 
 I've seen it hundreds of times.
 
-• You're burnt out doing everything alone
-• You've tried "everything" to get consistent leads
-• Your personal life is suffering while you're glued to your laptop trying to keep the business alive
-• Wondering why you haven't scaled more and it's killing you day by day
+- You're burnt out doing everything alone
+- You've tried "everything" to get consistent leads
+- Your personal life is suffering while you're glued to your laptop trying to keep the business alive
+- Wondering why you haven't scaled more and it's killing you day by day
 
 Let's be real: **what got you to $5-10K won't get you to $20K+ consistently.**
 
@@ -136,106 +266,10 @@ Charlie
 
 **P.S.** Ask yourself this: Where will you be 90 days from now if nothing changes? Still overwhelmed, still inconsistent? Or booking 30+ calls per month with a clear path to $20K+? The choice is yours. But don't wait - this guaranteed offer won't be around forever.`
     },
-    ascension: {
-      title: "Client Ascension Email",
-      type: "Practice",
-      description: "Agency owner upsell sequence. Direct, no-BS positioning for scaling revenue.",
-      tags: ["Upsell", "Agency", "Scaling"],
-      content: `**Subject Line:** [name]! You're not stuck… You're just one system away.
-
-Let's be real
-
-You don't need more hustle.
-
-Past a certain point, you need to use the leverage you've built in a creative way.
-
-**You're the boss now, so act like it.**
-
-As a successful business owner that wants to scale more than anything…
-
-You need a machine that actually works.
-
-And that's exactly what you'll find inside **Client Ascension.**
-
-We give agency owners the exact systems, mentorship, and accountability to go from unreliable to consistent $20k, $50k, even $100k+ revenue every month without burning out.
-
-**You'll have unlimited access to:**
-
-✓ A plug-and-play client acquisition system so you never have to rely on referrals again
-✓ An offer so compelling your ideal clients feel stupid not to buy
-✓ Scalable fulfillment systems and automation so you stop being the bottleneck
-✓ Weekly access to top-tier coaches and a community of hungry agency owners pushing you forward
-✓ Templates, SOPs, and frameworks for sales, onboarding, delivery, and scaling
-
-No fluff. No recycled guru advice.
-
-Just a straight path to the results you've been grinding for.
-
-Do yourself a favor (name).
-
-Make this the last program you'll ever need in your entire life.
-
-**(LINK)**
-
-**P.S.** – You've already done the hard part — realizing your agency deserves more. Now it's just a matter of plugging into a system that's PROVEN to work.
-
-Click here to see how Client Ascension can help you scale to $100k/month — without guessing, grinding insane hours, or swimming upstream, alone.`
-    },
-    sales: {
-      title: "SaaS Product Email",
-      type: "Practice",
-      description: "AI-powered sales platform positioning. Problem-solution with competitive urgency.",
-      tags: ["SaaS", "B2B", "Sales Tech"],
-      content: `**Subject Line:** Your best sales reps are hoarding their secrets (and it's silently costing you deals every week)
-
-Hey there,
-
-Your top sales performer is keeping their best tactics to themselves.
-
-It's how they stay valuable. It's how they outperform everyone else. And it's silently bleeding your company dry of revenue that should be yours.
-
-This isn't a hypothetical - I see it in nearly every sales team I consult with.
-
-Your reps are all working in silos. No collaboration. Zero visibility between team members. Every deal feels like reinventing the wheel.
-
-Every sales leader thinks their problem is more leads. It's not.
-
-**It's that every rep is doing their own thing. No consistency. No visibility. No control.**
-
-And you're bleeding deals because of it.
-
-I call it "sales isolation syndrome" - when your team has talent but they're trapped in their own individual bubbles.
-
-It's burning out your team, stalling deals at the finish line, and worst of all, it's completely fixable.
-
-Which is why I'm so excited about what the team at **SalesMomentum.io** has built.
-
-Their AI-powered sales platform is the first one I've seen that actually solves the collaboration problem while supercharging your entire pipeline.
-
-**Here's what makes it different:**
-
-• Their AI sales assistant analyzes conversations and suggests proven responses in real-time (no more guessing what works)
-• Every rep's best tactics get shared automatically across the team (no more knowledge hoarding)
-• The pipeline automation eliminates the boring admin work that steals 37% of your team's selling time
-• And their custom playbooks let you clone your top performers' strategies with one click
-
-One client implemented it last quarter and saw their close rate jump 24% in the first 30 days. Another cut their sales cycle in half.
-
-If you're ready to stop the revenue leaks and give your team the tools they actually need, check it out here:
-
-**[LINK]**
-
-I rarely recommend software, but when something solves a problem this big, this effectively, I have to share it.
-
-Best,
-[Your Name]
-
-**P.S.** If you book a demo this week, their team will personally set everything up for you — so your reps are running the new system in days, not months. Normally $5K. Yours free: [LINK]`
-    },
     coaching: {
       title: "High-Ticket Coaching Ads (5 Variations)",
       type: "Practice",
-      description: "Facebook ad copy for sales coaching program. Multiple iterations with different hooks.",
+      description: "Facebook ad copy for sales coaching program. Multiple hooks and angles.",
       tags: ["Coaching", "High-Ticket", "FB Ads", "A/B Testing"],
       content: `**Ad Copy (V1)**
 **Headline:** "Zero to Sales Pro: Risk-Free Career Launch"
@@ -284,10 +318,10 @@ Looking at entry-level jobs with $35K salaries? Our sales coaching graduates ave
 "I had zero sales experience and was working at a warehouse. After this program, I landed a SaaS sales role and made $96K my first year." - David L. (21)`
     },
     highscore: {
-      title: "Entelech High-Score Sequence",
+      title: "Lead Scoring Email Sequence",
       type: "Practice",
-      description: "High-ticket coaching sequences with behavioral triggers and objection handling.",
-      tags: ["Coaching", "Behavioral", "High-Ticket"],
+      description: "Behavioral trigger sequences based on lead score. 4-email nurture flow.",
+      tags: ["Lead Scoring", "Behavioral", "Automation"],
       content: `**Email 1**
 **Subject:** Your automation readiness score: 8/9
 **Preview:** You're not broken—but you're leaking thousands every month. Here's proof.
@@ -366,48 +400,6 @@ The discovery call is 45 minutes. We map your top 3 bottlenecks and show you wha
 After Wednesday, the link expires and we prioritize others ready to act.
 
 Clock's ticking.`
-    },
-    closing: {
-      title: "Closing Bible Email",
-      type: "Practice",
-      description: "Sales coaching email for remote closers. Performance-based positioning.",
-      tags: ["Sales", "Coaching", "Remote"],
-      content: `**Subject Line:** Why you're not hitting 5-figure months
-
-Hey [First Name],
-
-If you're reading this, you're already making decent money in a sales role (unless you lied in the typeform)
-
-BUT…
-
-You're tired of chasing unqualified leads, being stuck at low commissions, and watching others hit 5-figure months while you know you're capable of more.
-
-You have the skills to have 5-figure months, but you don't know why it hasn't happened yet…
-
-**Here's the truth:**
-
-Life-changing income from sales is right around the corner.
-
-The leap from setter to remote closer isn't about talent. It's about having the right system and mentorship. We've helped over 118 students make that leap to a higher earning potential with less headache.
-
-That's exactly what you'll find inside **The Closing Bible**. It's a proven process designed to help you:
-
-✓ Master high-ticket closing
-✓ Land remote offers
-✓ Earn 5-figure months — consistently
-
-If you're serious about making sales your vehicle for freedom, this is your next step.
-
-Book your free strategy call here. ←- link
-
-We'll break down where you're at, where you want to go, and how to bridge the gap — fast.
-
-You've got the drive.
-
-Let's build the skillset to match it.
-
-Talk soon,
-[Your Name]`
     }
   };
 
@@ -422,9 +414,9 @@ Talk soon,
           * { margin: 0; padding: 0; box-sizing: border-box; }
 
           :root {
-            --bg-primary: #000000; --bg-secondary: #0a0a0a; --bg-hover: #141414;
+            --bg-primary: #000000; --bg-secondary: #0a0a0a; --bg-tertiary: #111111; --bg-hover: #141414;
             --text-primary: #ffffff; --text-secondary: #a0a0a0; --text-muted: #666666;
-            --accent: #3b82f6; --border: #1a1a1a; --success: #10b981;
+            --accent: #3b82f6; --accent-hover: #2563eb; --border: #1a1a1a; --success: #10b981; --warning: #f59e0b;
           }
 
           body {
@@ -438,16 +430,24 @@ Talk soon,
             display: flex; justify-content: space-between; align-items: center; }
           nav .logo { font-size: 1.1rem; font-weight: 600; }
           nav .links { display: flex; gap: 2rem; }
-          nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+          nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; cursor: pointer; }
           nav a:hover { color: var(--text-primary); }
 
           main { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem 4rem; }
-          .hero { margin-bottom: 4rem; }
+
+          .hero { margin-bottom: 3rem; }
           .hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;
             background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text; }
-          .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 600px; }
+          .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 700px; }
+
+          .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+          .tab { padding: 0.75rem 1.5rem; background: transparent; border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text-secondary); cursor: pointer; font-size: 0.95rem;
+            transition: all 0.2s; }
+          .tab:hover { background: var(--bg-hover); color: var(--text-primary); }
+          .tab.active { background: var(--accent); border-color: var(--accent); color: white; }
 
           .section { margin-bottom: 4rem; }
           .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
@@ -456,6 +456,48 @@ Talk soon,
           .section-badge { background: var(--bg-hover); color: var(--text-secondary);
             padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.8rem; }
 
+          .case-grid { display: grid; gap: 2rem; }
+          .case-card { background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 16px; overflow: hidden; transition: all 0.3s; cursor: pointer; }
+          .case-card:hover { border-color: var(--accent); transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+
+          .case-header { padding: 2rem 2rem 1rem; }
+          .case-meta { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+          .case-type { background: var(--success); color: white; padding: 0.25rem 0.75rem;
+            border-radius: 6px; font-size: 0.75rem; font-weight: 500; }
+          .case-type.dev { background: var(--accent); }
+          .case-status { background: var(--bg-hover); color: var(--text-secondary); padding: 0.25rem 0.75rem;
+            border-radius: 6px; font-size: 0.75rem; }
+          .case-status.active { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+          .case-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.75rem; }
+          .case-description { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem; }
+          .case-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+          .tag { background: var(--bg-primary); border: 1px solid var(--border); padding: 0.25rem 0.75rem;
+            border-radius: 6px; font-size: 0.8rem; color: var(--text-secondary); }
+
+          .case-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+            background: var(--border); border-top: 1px solid var(--border); }
+          .metric { background: var(--bg-tertiary); padding: 1.25rem; text-align: center; }
+          .metric-value { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; }
+          .metric-label { font-size: 0.8rem; color: var(--text-muted); }
+          .metric-sublabel { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+          .case-cta { padding: 1.25rem 2rem; background: var(--bg-tertiary); border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; }
+          .view-case { color: var(--accent); font-size: 0.9rem; font-weight: 500; }
+
+          .platform-preview { margin-top: 3rem; }
+          .platform-preview h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text-primary); }
+          .preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+          .preview-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px;
+            overflow: hidden; transition: all 0.3s; }
+          .preview-card:hover { border-color: var(--accent); }
+          .preview-frame { width: 100%; height: 300px; border: none; background: var(--bg-tertiary); }
+          .preview-label { padding: 1rem; border-top: 1px solid var(--border); }
+          .preview-label h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.25rem; }
+          .preview-label p { font-size: 0.8rem; color: var(--text-muted); }
+
           .samples-grid { display: grid; gap: 1.5rem; }
           .sample-card { background: var(--bg-secondary); border: 1px solid var(--border);
             border-radius: 12px; padding: 2rem; transition: all 0.3s; cursor: pointer; }
@@ -463,16 +505,14 @@ Talk soon,
           .sample-card .view-btn { display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem;
             background: var(--accent); color: white; border-radius: 6px; font-size: 0.9rem;
             transition: all 0.2s; }
-          .sample-card:hover .view-btn { background: #2563eb; }
+          .sample-card:hover .view-btn { background: var(--accent-hover); }
           .sample-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
           .sample-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; }
           .sample-type { background: var(--accent); color: white; padding: 0.25rem 0.75rem;
             border-radius: 6px; font-size: 0.75rem; font-weight: 500; white-space: nowrap; }
           .sample-type.client { background: var(--success); }
           .sample-description { color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem; }
-          .sample-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
-          .tag { background: var(--bg-primary); border: 1px solid var(--border); padding: 0.25rem 0.75rem;
-            border-radius: 6px; font-size: 0.8rem; color: var(--text-secondary); }
+
           .github-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent);
             text-decoration: none; font-size: 0.9rem; margin-top: 1rem; }
           .github-link:hover { text-decoration: underline; }
@@ -481,7 +521,7 @@ Talk soon,
             background: rgba(0, 0, 0, 0.92); z-index: 2000; display: flex; align-items: center;
             justify-content: center; padding: 2rem; opacity: 0; animation: fadeIn 0.3s forwards; }
           .modal-content { background: var(--bg-secondary); border: 1px solid var(--border);
-            border-radius: 16px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto;
+            border-radius: 16px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto;
             padding: 3rem; position: relative; transform: scale(0.95); opacity: 0;
             animation: slideIn 0.3s 0.1s forwards; }
           .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: var(--bg-hover);
@@ -495,7 +535,8 @@ Talk soon,
           .modal-body p { margin-bottom: 1rem; }
           .modal-body ul, .modal-body ol { margin-left: 1.5rem; margin-bottom: 1rem; }
           .modal-body li { margin-bottom: 0.5rem; }
-          .modal-body h3 { color: var(--text-primary); font-size: 1.2rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+          .modal-body h2 { color: var(--text-primary); font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+          .modal-body h3 { color: var(--text-primary); font-size: 1.2rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
           .modal-body hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
           .modal-body code { background: var(--bg-hover); padding: 0.2rem 0.4rem; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; }
 
@@ -504,14 +545,15 @@ Talk soon,
 
           footer { max-width: 1200px; margin: 4rem auto 2rem; padding: 2rem; text-align: center;
             color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); }
-          .footer-note { background: var(--bg-secondary); border: 1px solid var(--border);
-            border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; }
 
           @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
             nav .links { gap: 1rem; font-size: 0.85rem; }
             .modal-content { padding: 2rem; }
             .modal-title { font-size: 1.5rem; }
+            .tabs { flex-wrap: wrap; }
+            .case-metrics { grid-template-columns: 1fr; }
+            .preview-grid { grid-template-columns: 1fr; }
           }
         ` }} />
       </head>
@@ -520,191 +562,210 @@ Talk soon,
           <div className="container">
             <div className="logo">Ethan Sperry</div>
             <div className="links">
-              <a href="#email">Email Copy</a>
-              <a href="#projects">Projects</a>
-              <a href="#about">About</a>
+              <a onClick={() => setActiveTab('cases')}>Case Studies</a>
+              <a onClick={() => setActiveTab('copy')}>Email Copy</a>
+              <a onClick={() => setActiveTab('projects')}>Projects</a>
             </div>
           </div>
         </nav>
 
         <main>
           <section className="hero">
-            <h1>Frontend Development<br />Growth Ops Consulting<br />Copywriting</h1>
-            <p>Technical implementation, growth operations, and conversion-focused copy. Consulting for TNT Transportation on automation and full-stack systems.</p>
+            <h1>Growth Systems &<br />Technical Implementation</h1>
+            <p>I build cold email infrastructure, automation systems, and growth operations for B2B companies. Currently consulting for TNT Transportation on corporate outreach and automation.</p>
           </section>
 
-          <section id="email" className="section">
-            <div className="section-header"><h2>Email Copywriting</h2><span className="section-badge">8 samples</span></div>
-            <div className="samples-grid">
+          <div className="tabs">
+            <button className={`tab ${activeTab === 'cases' ? 'active' : ''}`} onClick={() => setActiveTab('cases')}>
+              Case Studies
+            </button>
+            <button className={`tab ${activeTab === 'copy' ? 'active' : ''}`} onClick={() => setActiveTab('copy')}>
+              Email Copy
+            </button>
+            <button className={`tab ${activeTab === 'projects' ? 'active' : ''}`} onClick={() => setActiveTab('projects')}>
+              Technical Projects
+            </button>
+          </div>
 
-              <div className="sample-card" onClick={() => setModalContent({
-                title: "TNT Transportation Newsletter",
-                type: "Client Work",
-                content: "B2B corporate newsletter sent to 300 customer contacts. Holiday-themed relationship marketing.\n\n**Results:**\n• 53% open rate (Day 1)\n• 300+ recipients\n• B2B transportation industry\n\nThis was part of ongoing consulting work for TNT Transportation, focusing on customer relationship marketing and retention strategies."
-              })}>
-                <div className="sample-header">
-                  <div>
-                    <div className="sample-title">TNT Transportation Newsletter</div>
-                    <div className="sample-description">B2B corporate newsletter to 300 customer contacts. Holiday-themed relationship marketing.</div>
+          {activeTab === 'cases' && (
+            <section className="section">
+              <div className="case-grid">
+                {Object.entries(caseStudies).map(([key, study]) => (
+                  <div key={key} className="case-card" onClick={() => setModalContent({
+                    title: study.title,
+                    type: study.type,
+                    content: study.content
+                  })}>
+                    <div className="case-header">
+                      <div className="case-meta">
+                        <span className={`case-type ${study.type === 'Dev Partner' ? 'dev' : ''}`}>{study.type}</span>
+                        <span className={`case-status ${study.status === 'In Development' || study.status === 'Production' ? 'active' : ''}`}>{study.status}</span>
+                      </div>
+                      <div className="case-title">{study.title}</div>
+                      <div className="case-description">{study.description}</div>
+                      <div className="case-tags">
+                        {study.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
+                      </div>
+                    </div>
+                    <div className="case-metrics">
+                      {study.metrics.map((metric, i) => (
+                        <div key={i} className="metric">
+                          <div className="metric-value">{metric.value}</div>
+                          <div className="metric-label">{metric.label}</div>
+                          <div className="metric-sublabel">{metric.sublabel}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="case-cta">
+                      <span className="view-case">View Full Case Study →</span>
+                    </div>
                   </div>
-                  <span className="sample-type client">Client Work</span>
-                </div>
-                <div className="sample-tags"><span className="tag">B2B</span><span className="tag">Newsletter</span><span className="tag">Transportation</span></div>
-                <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border)', display: 'flex', gap: '2rem' }}>
-                  <div><div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--success)' }}>53%</div><div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Open Rate (Day 1)</div></div>
-                  <div><div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--success)' }}>300+</div><div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Recipients</div></div>
-                </div>
-                <div className="view-btn">View Email →</div>
+                ))}
               </div>
 
-              {Object.entries(emailSamples).map(([key, sample]) => (
-                <div key={key} className="sample-card" onClick={() => setModalContent({
-                  title: sample.title,
-                  type: sample.type,
-                  content: sample.content
-                })}>
+              <div className="platform-preview">
+                <h3>Platform & Tools (Live Preview)</h3>
+                <div className="preview-grid">
+                  <div className="preview-card">
+                    <iframe
+                      src="https://entelech-platform.vercel.app/dashboard"
+                      className="preview-frame"
+                      title="Dashboard Preview"
+                    />
+                    <div className="preview-label">
+                      <h4>Operations Dashboard</h4>
+                      <p>Real-time engagement tracking and KPIs</p>
+                    </div>
+                  </div>
+                  <div className="preview-card">
+                    <iframe
+                      src="https://entelech-platform.vercel.app/outbound"
+                      className="preview-frame"
+                      title="Outbound Preview"
+                    />
+                    <div className="preview-label">
+                      <h4>Outbound Management</h4>
+                      <p>Campaign tracking and sequence management</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {activeTab === 'copy' && (
+            <section className="section">
+              <div className="section-header">
+                <h2>Email Copywriting Samples</h2>
+                <span className="section-badge">Practice + Client Work</span>
+              </div>
+              <div className="samples-grid">
+                {Object.entries(emailSamples).map(([key, sample]) => (
+                  <div key={key} className="sample-card" onClick={() => setModalContent({
+                    title: sample.title,
+                    type: sample.type,
+                    content: sample.content
+                  })}>
+                    <div className="sample-header">
+                      <div>
+                        <div className="sample-title">{sample.title}</div>
+                        <div className="sample-description">{sample.description}</div>
+                      </div>
+                      <span className="sample-type">{sample.type}</span>
+                    </div>
+                    <div className="case-tags">{sample.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}</div>
+                    <div className="view-btn">View Email →</div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {activeTab === 'projects' && (
+            <section className="section">
+              <div className="section-header">
+                <h2>Technical Projects</h2>
+                <span className="section-badge">GitHub</span>
+              </div>
+              <div className="samples-grid">
+                <div className="sample-card" style={{cursor: 'default'}}>
                   <div className="sample-header">
                     <div>
-                      <div className="sample-title">{sample.title}</div>
-                      <div className="sample-description">{sample.description}</div>
+                      <div className="sample-title">TNT Transportation Platform</div>
+                      <div className="sample-description">Full-stack automation, documentation, and workflow systems.</div>
                     </div>
-                    <span className="sample-type">{sample.type}</span>
+                    <span className="sample-type client">Client Work</span>
                   </div>
-                  <div className="sample-tags">{sample.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}</div>
-                  <div className="view-btn">View Email →</div>
+                  <div className="case-tags">
+                    <span className="tag">Next.js</span>
+                    <span className="tag">PostgreSQL</span>
+                    <span className="tag">n8n</span>
+                    <span className="tag">QuickBooks API</span>
+                  </div>
+                  <a href="https://github.com/sperry-entelech/tnt-documentation" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
                 </div>
-              ))}
 
-            </div>
-          </section>
-
-          <section id="projects" className="section">
-            <div className="section-header"><h2>Technical Projects</h2><span className="section-badge">Selected repos</span></div>
-            <div className="samples-grid">
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">TNT Transportation Automation</div><div className="sample-description">Consulting on automation and implementation. Documentation, workflow systems, and integrations.</div></div>
-                  <span className="sample-type client">Client Work</span>
+                <div className="sample-card" style={{cursor: 'default'}}>
+                  <div className="sample-header">
+                    <div>
+                      <div className="sample-title">Entelech Platform</div>
+                      <div className="sample-description">Internal operations platform with dashboard, outbound management, and client tools.</div>
+                    </div>
+                    <span className="sample-type">Internal</span>
+                  </div>
+                  <div className="case-tags">
+                    <span className="tag">Next.js</span>
+                    <span className="tag">TypeScript</span>
+                    <span className="tag">Vercel</span>
+                  </div>
+                  <a href="https://entelech-platform.vercel.app" target="_blank" rel="noopener" className="github-link">View Live →</a>
                 </div>
-                <div className="sample-tags"><span className="tag">Next.js</span><span className="tag">PostgreSQL</span><span className="tag">n8n</span><span className="tag">QuickBooks API</span></div>
-                <a href="https://github.com/sperry-entelech/tnt-documentation" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
+
+                <div className="sample-card" style={{cursor: 'default'}}>
+                  <div className="sample-header">
+                    <div>
+                      <div className="sample-title">Claude Skills Factory</div>
+                      <div className="sample-description">AI skills development platform with Claude API integration.</div>
+                    </div>
+                    <span className="sample-type">Demo</span>
+                  </div>
+                  <div className="case-tags">
+                    <span className="tag">TypeScript</span>
+                    <span className="tag">Claude API</span>
+                    <span className="tag">React</span>
+                  </div>
+                  <a href="https://github.com/sperry-entelech/claude-skills-factory-frontend" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
+                </div>
+
+                <div className="sample-card" style={{cursor: 'default'}}>
+                  <div className="sample-header">
+                    <div>
+                      <div className="sample-title">MTT Poker Solver</div>
+                      <div className="sample-description">Multi-table tournament solver with ICM calculations. Functional UI.</div>
+                    </div>
+                    <span className="sample-type">Demo</span>
+                  </div>
+                  <div className="case-tags">
+                    <span className="tag">TypeScript</span>
+                    <span className="tag">React</span>
+                    <span className="tag">PostgreSQL</span>
+                  </div>
+                  <a href="https://github.com/sperry-entelech/mtt-solver" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
+                </div>
               </div>
 
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">Fulcrum Landing Page</div><div className="sample-description">Landing page project with modern design system.</div></div>
-                  <span className="sample-type">Demo</span>
-                </div>
-                <div className="sample-tags"><span className="tag">Landing Page</span><span className="tag">Design System</span></div>
-                <a href="https://github.com/sperry-entelech/fulcrum" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
+              <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px' }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '0.5rem' }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>View all 40+ repositories:</strong>
+                </p>
+                <a href="https://github.com/sperry-entelech?tab=repositories" target="_blank" rel="noopener" className="github-link">github.com/sperry-entelech →</a>
               </div>
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">Echelon Database</div><div className="sample-description">PLpgSQL database architecture and backend systems.</div></div>
-                  <span className="sample-type">Internal</span>
-                </div>
-                <div className="sample-tags"><span className="tag">PostgreSQL</span><span className="tag">PLpgSQL</span><span className="tag">Backend</span></div>
-                <a href="https://github.com/sperry-entelech/echelon" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
-              </div>
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">AI Incubator Aggregator</div><div className="sample-description">TypeScript application for aggregating AI incubator data.</div></div>
-                  <span className="sample-type">Demo</span>
-                </div>
-                <div className="sample-tags"><span className="tag">TypeScript</span><span className="tag">AI</span><span className="tag">Data</span></div>
-                <a href="https://github.com/sperry-entelech/AIIA-AI-Incubator-Aggregator" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
-              </div>
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">Self-Iterating Documentation</div><div className="sample-description">Documentation system that maintains and updates itself.</div></div>
-                  <span className="sample-type">Internal</span>
-                </div>
-                <div className="sample-tags"><span className="tag">TypeScript</span><span className="tag">Documentation</span><span className="tag">Automation</span></div>
-                <a href="https://github.com/sperry-entelech/self-iterating-documentation" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
-              </div>
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">Claude Skills Factory</div><div className="sample-description">Frontend and backend for Claude AI skills development platform.</div></div>
-                  <span className="sample-type">Demo</span>
-                </div>
-                <div className="sample-tags"><span className="tag">TypeScript</span><span className="tag">JavaScript</span><span className="tag">Claude API</span></div>
-                <a href="https://github.com/sperry-entelech/claude-skills-factory-frontend" target="_blank" rel="noopener" className="github-link">View Frontend →</a>
-              </div>
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">Member Engagement Platform</div><div className="sample-description">Community engagement dashboard and management system.</div></div>
-                  <span className="sample-type">Demo</span>
-                </div>
-                <div className="sample-tags"><span className="tag">TypeScript</span><span className="tag">Dashboard</span><span className="tag">Community</span></div>
-                <a href="https://github.com/sperry-entelech/member-engagement-platform" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
-              </div>
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">MTT Poker Solver</div><div className="sample-description">Multi-table tournament poker solver with ICM calculations. UI functional, MVP stage.</div></div>
-                  <span className="sample-type">Demo</span>
-                </div>
-                <div className="sample-tags"><span className="tag">TypeScript</span><span className="tag">React</span><span className="tag">PostgreSQL</span></div>
-                <a href="https://github.com/sperry-entelech/mtt-solver" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
-              </div>
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">Proposal Generator</div><div className="sample-description">AI-powered proposal generation system. Claude 3.5 integration.</div></div>
-                  <span className="sample-type">Demo</span>
-                </div>
-                <div className="sample-tags"><span className="tag">HTML</span><span className="tag">Claude API</span><span className="tag">AI</span></div>
-                <a href="https://github.com/sperry-entelech/proposal-generator-demo" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
-              </div>
-
-              <div className="sample-card" style={{cursor: 'default'}}>
-                <div className="sample-header">
-                  <div><div className="sample-title">Matrix Daily Brief</div><div className="sample-description">Daily briefing system with automated intelligence gathering.</div></div>
-                  <span className="sample-type">Internal</span>
-                </div>
-                <div className="sample-tags"><span className="tag">TypeScript</span><span className="tag">Automation</span></div>
-                <a href="https://github.com/sperry-entelech/matrix-daily-brief" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
-              </div>
-
-            </div>
-
-            <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '12px' }}>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '0.5rem' }}>
-                <strong style={{ color: 'var(--text-primary)' }}>View all 40+ repositories:</strong>
-              </p>
-              <a href="https://github.com/sperry-entelech?tab=repositories" target="_blank" rel="noopener" className="github-link">github.com/sperry-entelech →</a>
-            </div>
-          </section>
-
-          <section id="about" className="section">
-            <div className="section-header"><h2>About</h2></div>
-            <div className="sample-card" style={{cursor: 'default'}}>
-              <div className="sample-title" style={{ marginBottom: '1.5rem' }}>Services</div>
-              <div style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-                <p style={{ marginBottom: '1rem' }}><strong style={{ color: 'var(--text-primary)' }}>Email Copywriting</strong></p>
-                <p style={{ marginBottom: '2rem' }}>Behavior-triggered sequences, landing pages, and conversion-focused messaging. I write copy that addresses objections and moves prospects through funnels predictably.</p>
-                <p style={{ marginBottom: '1rem' }}><strong style={{ color: 'var(--text-primary)' }}>Technical Development</strong></p>
-                <p style={{ marginBottom: '2rem' }}>Full-stack applications, automation systems, and database architecture. TypeScript, React, Next.js, PostgreSQL, and Claude API integrations.</p>
-                <p style={{ marginBottom: '1rem' }}><strong style={{ color: 'var(--text-primary)' }}>Consulting</strong></p>
-                <p>Currently consulting for TNT Transportation on automation and implementation projects. Available for similar engagements.</p>
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
         </main>
 
         <footer>
-          <div className="footer-note">
-            <strong>Portfolio Note:</strong> Practice email samples demonstrate frameworks and strategic approaches.
-            Client work results are verified (TNT Transportation consulting, 53% open rate on 300-recipient newsletter).
-            Technical projects range from production code to MVPs and demos. Some projects are works in progress.
-          </div>
-          <p style={{ marginTop: '2rem' }}>Ethan Sperry · sperry@entelech.net</p>
+          <p>Ethan Sperry · sperry@entelech.net</p>
           <p style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>
             <a href="https://github.com/sperry-entelech" target="_blank" rel="noopener" style={{ color: 'var(--accent)', textDecoration: 'none' }}>GitHub</a>
           </p>
@@ -716,7 +777,7 @@ Talk soon,
               <div className="modal-close" onClick={() => setModalContent(null)}>×</div>
               <div className="modal-title">{modalContent.title}</div>
               <div style={{ marginBottom: '1.5rem' }}>
-                <span className={`sample-type ${modalContent.type === 'Client Work' ? 'client' : ''}`}>{modalContent.type}</span>
+                <span className={`sample-type ${modalContent.type === 'Active Client' || modalContent.type === 'Client Work' ? 'client' : ''}`}>{modalContent.type}</span>
               </div>
               <div className="modal-body">
                 <ReactMarkdown>{modalContent.content}</ReactMarkdown>
