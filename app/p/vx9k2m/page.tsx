@@ -71,16 +71,24 @@ This builds a predictable pipeline that compounds—each corporate account gener
       title: "Construction Bids AI: Cold Email System",
       type: "Dev Partner",
       status: "Production",
-      description: "Built the cold email automation system for construction industry lead generation.",
+      description: "Built the cold email automation system generating 12 new conversions/month for construction lead gen platform.",
       tags: ["AI", "Cold Email", "Construction", "Lead Gen"],
       metrics: [
-        { label: "Industry", value: "Construction", sublabel: "General contractors & subs" },
-        { label: "System Type", value: "AI-Powered", sublabel: "Intelligent lead scoring" },
-        { label: "Role", value: "Dev Partner", sublabel: "Built email infrastructure" }
+        { label: "Conversions", value: "12/mo", sublabel: "New paying customers" },
+        { label: "Ticket Range", value: "$45-$450", sublabel: "Per conversion" },
+        { label: "Revenue Impact", value: "$540-$5.4K", sublabel: "Monthly from email system" }
       ],
       content: `## Technical Implementation
 
 Developed the cold email automation infrastructure for Construction Bids AI, an AI-powered platform helping contractors find and win more bids.
+
+### Results
+
+**12 new conversions per month** directly attributed to the cold email system I built.
+
+- Ticket range: **$45-$450** per conversion
+- Monthly revenue impact: **$540-$5,400** from email channel alone
+- System runs autonomously with minimal maintenance
 
 ### What I Built
 
@@ -101,14 +109,6 @@ Developed the cold email automation infrastructure for Construction Bids AI, an 
 - Geographic personalization
 - Project-type targeting
 - Follow-up automation based on open/click behavior
-
-### Results
-
-The system enables Construction Bids AI to:
-- Send thousands of targeted emails monthly
-- Maintain high deliverability (no spam folder issues)
-- Track engagement through to closed deals
-- Scale outreach without manual effort
 
 ### Tech Stack
 
@@ -628,24 +628,24 @@ Clock's ticking.`
                 <div className="preview-grid">
                   <div className="preview-card">
                     <iframe
-                      src="https://entelech-platform.vercel.app/dashboard"
+                      src="https://entelech-platform.vercel.app/tools"
                       className="preview-frame"
-                      title="Dashboard Preview"
+                      title="Tools Preview"
                     />
                     <div className="preview-label">
-                      <h4>Operations Dashboard</h4>
-                      <p>Real-time engagement tracking and KPIs</p>
+                      <h4>AI Document Generators</h4>
+                      <p>Proposal Generator, SOW Builder, Contract Tools</p>
                     </div>
                   </div>
                   <div className="preview-card">
                     <iframe
-                      src="https://entelech-platform.vercel.app/outbound"
+                      src="https://entelech-platform.vercel.app/projects"
                       className="preview-frame"
-                      title="Outbound Preview"
+                      title="Projects Preview"
                     />
                     <div className="preview-label">
-                      <h4>Outbound Management</h4>
-                      <p>Campaign tracking and sequence management</p>
+                      <h4>Projects Hub</h4>
+                      <p>13 active projects across 8 categories</p>
                     </div>
                   </div>
                 </div>
