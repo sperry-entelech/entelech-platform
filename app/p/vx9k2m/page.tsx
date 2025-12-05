@@ -11,7 +11,7 @@ export default function PortfolioPage() {
     tnt2026: {
       title: "TNT Transportation: 2026 Corporate Outreach System",
       type: "Active Client",
-      status: "In Development",
+      status: "System Design Complete",
       description: "B2B cold email system targeting corporate fleet accounts with $5-30K+ lifetime value.",
       tags: ["Cold Email", "B2B", "Corporate Accounts", "Automation"],
       metrics: [
@@ -462,6 +462,8 @@ Clock's ticking.`
           .case-card:hover { border-color: var(--accent); transform: translateY(-4px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
 
+          .case-screenshot { width: 100%; height: 180px; background: var(--bg-tertiary); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem; }
+
           .case-header { padding: 2rem 2rem 1rem; }
           .case-meta { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
           .case-type { background: var(--success); color: white; padding: 0.25rem 0.75rem;
@@ -513,6 +515,12 @@ Clock's ticking.`
           .sample-type.client { background: var(--success); }
           .sample-description { color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem; }
 
+          .project-links { display: flex; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap; }
+          .demo-link { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent); color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; }
+          .demo-link:hover { background: var(--accent-hover); }
+          .github-link-secondary { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; border: 1px solid var(--border); transition: all 0.2s; }
+          .github-link-secondary:hover { color: var(--text-primary); border-color: var(--text-muted); }
+
           .github-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent);
             text-decoration: none; font-size: 0.9rem; margin-top: 1rem; }
           .github-link:hover { text-decoration: underline; }
@@ -542,6 +550,12 @@ Clock's ticking.`
 
           @keyframes fadeIn { to { opacity: 1; } }
           @keyframes slideIn { to { transform: scale(1); opacity: 1; } }
+
+          .cta-section { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%); border: 1px solid var(--border); border-radius: 16px; padding: 3rem; text-align: center; margin: 3rem 0; }
+          .cta-section h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
+          .cta-section p { color: var(--text-secondary); margin-bottom: 1.5rem; }
+          .cta-button { display: inline-block; background: var(--accent); color: white; padding: 0.875rem 2rem; border-radius: 8px; text-decoration: none; font-size: 1rem; font-weight: 600; transition: all 0.2s; }
+          .cta-button:hover { background: var(--accent-hover); transform: translateY(-2px); }
 
           footer { max-width: 1200px; margin: 4rem auto 2rem; padding: 2rem; text-align: center;
             color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); }
@@ -596,10 +610,11 @@ Clock's ticking.`
                     type: study.type,
                     content: study.content
                   })}>
+                    <div className="case-screenshot" data-case={key}>Screenshot placeholder</div>
                     <div className="case-header">
                       <div className="case-meta">
                         <span className={`case-type ${study.type === 'Dev Partner' ? 'dev' : ''}`}>{study.type}</span>
-                        <span className={`case-status ${study.status === 'In Development' || study.status === 'Production' ? 'active' : ''}`}>{study.status}</span>
+                        <span className={`case-status ${study.status === 'System Design Complete' || study.status === 'Production' ? 'active' : ''}`}>{study.status}</span>
                       </div>
                       <div className="case-title">{study.title}</div>
                       <div className="case-description">{study.description}</div>
@@ -623,34 +638,7 @@ Clock's ticking.`
                 ))}
               </div>
 
-              <div className="platform-preview">
-                <h3>Platform & Tools (Live Preview)</h3>
-                <div className="preview-grid">
-                  <div className="preview-card">
-                    <iframe
-                      src="https://entelech-platform.vercel.app/tools"
-                      className="preview-frame"
-                      title="Tools Preview"
-                    />
-                    <div className="preview-label">
-                      <h4>AI Document Generators</h4>
-                      <p>Proposal Generator, SOW Builder, Contract Tools</p>
-                    </div>
-                  </div>
-                  <div className="preview-card">
-                    <iframe
-                      src="https://entelech-platform.vercel.app/projects"
-                      className="preview-frame"
-                      title="Projects Preview"
-                    />
-                    <div className="preview-label">
-                      <h4>Projects Hub</h4>
-                      <p>13 active projects across 8 categories</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
+              </section>
           )}
 
           {activeTab === 'copy' && (
@@ -702,7 +690,7 @@ Clock's ticking.`
                     <span className="tag">n8n</span>
                     <span className="tag">QuickBooks API</span>
                   </div>
-                  <a href="https://github.com/sperry-entelech/tnt-documentation" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
+                  <div className="project-links"><a href="https://github.com/sperry-entelech/tnt-documentation" target="_blank" rel="noopener" className="github-link-secondary">GitHub →</a></div>
                 </div>
 
                 <div className="sample-card" style={{cursor: 'default'}}>
@@ -718,7 +706,7 @@ Clock's ticking.`
                     <span className="tag">TypeScript</span>
                     <span className="tag">Vercel</span>
                   </div>
-                  <a href="https://entelech-platform.vercel.app" target="_blank" rel="noopener" className="github-link">View Live →</a>
+                  <div className="project-links"><a href="https://entelech-platform.vercel.app" target="_blank" rel="noopener" className="demo-link">Live Demo →</a><a href="https://github.com/sperry-entelech/entelech-platform" target="_blank" rel="noopener" className="github-link-secondary">GitHub</a></div>
                 </div>
 
                 <div className="sample-card" style={{cursor: 'default'}}>
@@ -734,7 +722,7 @@ Clock's ticking.`
                     <span className="tag">Claude API</span>
                     <span className="tag">React</span>
                   </div>
-                  <a href="https://github.com/sperry-entelech/claude-skills-factory-frontend" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
+                  <div className="project-links"><a href="https://github.com/sperry-entelech/claude-skills-factory-frontend" target="_blank" rel="noopener" className="github-link-secondary">GitHub →</a></div>
                 </div>
 
                 <div className="sample-card" style={{cursor: 'default'}}>
@@ -750,7 +738,7 @@ Clock's ticking.`
                     <span className="tag">React</span>
                     <span className="tag">PostgreSQL</span>
                   </div>
-                  <a href="https://github.com/sperry-entelech/mtt-solver" target="_blank" rel="noopener" className="github-link">View on GitHub →</a>
+                  <div className="project-links"><a href="https://github.com/sperry-entelech/mtt-solver" target="_blank" rel="noopener" className="github-link-secondary">GitHub →</a></div>
                 </div>
               </div>
 
