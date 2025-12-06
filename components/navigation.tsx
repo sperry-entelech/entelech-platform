@@ -4,107 +4,80 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/contexts/auth-context';
+import { CommandPalette } from '@/components/command-palette';
 import {
   LayoutDashboard,
-  BookOpen,
-  Sparkles,
-  Users,
   Zap,
-  Building2,
   FolderKanban,
+  Building2,
   Settings,
-  Activity,
-  Link2,
-  FileText,
-  TrendingUp,
-  GitBranch,
   LogOut,
-  Mail,
 } from 'lucide-react';
 
 export function Navigation() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
-  const corePlatformItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/skills', label: 'Skills Library', icon: BookOpen },
-    { href: '/cursor-prompts', label: 'Cursor Prompts', icon: Sparkles },
-  ];
-
-  const businessSystemsItems = [
-    { href: '/systems', label: 'Systems Hub', icon: Building2 },
-    { href: '/systems/marketing', label: 'Marketing', icon: FileText },
-    { href: '/systems/sales', label: 'Sales Intelligence', icon: FileText },
-    { href: '/systems/service-delivery', label: 'Service Delivery', icon: FileText },
-    { href: '/systems/multi-agent', label: 'Multi-Agent System', icon: FileText },
-    { href: '/systems/client-success', label: 'Client Success', icon: FileText },
-  ];
-
-  const projectsItems = [
-    { href: '/projects', label: 'All Projects', icon: FolderKanban },
-    { href: '/projects?category=client-project', label: 'Client Projects', icon: Users },
-    { href: '/projects?category=tool', label: 'Tools', icon: Settings },
-  ];
-
   const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/systems', label: 'Systems', icon: Building2 },
     { href: '/projects', label: 'Projects', icon: FolderKanban },
-    { href: '/campaigns', label: 'Campaigns', icon: TrendingUp },
-    { href: '/outbound', label: 'Outbound', icon: Mail },
+    { href: '/systems', label: 'Systems', icon: Building2 },
     { href: '/tools', label: 'Tools', icon: Settings },
-    { href: '/context', label: 'Temporal Intelligence', icon: GitBranch },
-    { href: '/integrations', label: 'Integrations', icon: Link2 },
-    { href: '/logs', label: 'Logs', icon: Activity },
-    { href: '/skills', label: 'Skills', icon: BookOpen },
-    { href: '/cursor-prompts', label: 'Prompts', icon: Sparkles },
-    { href: '/clients', label: 'Clients', icon: Users },
   ];
 
   return (
     <nav className="border-b border-slate-800 bg-slate-900 sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2">
-            <Zap className="h-6 w-6 text-blue-400" />
-            <span className="text-xl font-bold text-white">Entelech Platform</span>
-          </Link>
-          <div className="flex items-center gap-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive =
-                pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
-              return (
-                <Link key={item.href} href={item.href}>
-                  <Button
-                    variant={isActive ? 'default' : 'ghost'}
-                    className={`flex items-center gap-2 ${
-                      isActive
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                        : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {item.label}
-                  </Button>
-                </Link>
-              );
-            })}
+        <div className="flex items-center justify-between h-14">
+          <div className="flex items-center gap-6">
+            <Link href="/" className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-blue-400" />
+              <span className="text-lg font-semibold text-white">Entelech</span>
+            </Link>
+
+            <div className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive =
+                  pathname === item.href || (item.href !== '/' && pathname?.startsWith(item.href));
+                return (
+                  <Link key={item.href} href={item.href}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`flex items-center gap-2 ${
+                        isActive
+                          ? 'bg-slate-800 text-white'
+                          : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </Button>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <CommandPalette />
+
             {user ? (
               <Button
                 variant="ghost"
+                size="sm"
                 onClick={logout}
-                className="text-slate-300 hover:text-white hover:bg-slate-800 flex items-center gap-2"
+                className="text-slate-400 hover:text-white hover:bg-slate-800/50"
               >
                 <LogOut className="h-4 w-4" />
-                Logout
               </Button>
             ) : (
               <Link href="/auth">
                 <Button
                   variant="ghost"
-                  className="text-slate-300 hover:text-white hover:bg-slate-800"
+                  size="sm"
+                  className="text-slate-400 hover:text-white hover:bg-slate-800/50"
                 >
                   Login
                 </Button>
