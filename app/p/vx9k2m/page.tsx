@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 
 export default function PortfolioPage() {
   const [modalContent, setModalContent] = useState<{title: string, content: string, type: string} | null>(null);
-  const [activeTab, setActiveTab] = useState<'cases' | 'copy' | 'projects'>('cases');
+  const [activeTab, setActiveTab] = useState<'cases' | 'web' | 'copy' | 'projects'>('cases');
 
   const caseStudies = {
     tnt2026: {
@@ -164,6 +164,42 @@ This validates:
 The high engagement rate demonstrates that TNT's corporate customers are receptive to email communication. This creates the foundation for the 2026 cold email system—if warm contacts engage at 53%, cold outreach with proper targeting should perform well above industry benchmarks.`
     }
   };
+
+  
+  const webDesignProjects = [
+    {
+      title: 'AAA Engineering Design',
+      type: 'Web Design',
+      description: 'Professional engineering firm website with consultation booking flow.',
+      image: '/screenshots/aaa-engineering.png',
+      tags: ['Next.js', 'Responsive', 'Lead Gen'],
+      url: 'https://aaaengineeringdesign.com'
+    },
+    {
+      title: 'LinkRank.ai',
+      type: 'SEO/AI-SEO',
+      description: 'SEO intelligence platform with audit tools and performance tracking.',
+      image: '/screenshots/linkrank.png',
+      tags: ['SEO Tools', 'Analytics', 'AI'],
+      url: 'https://linkrank.ai'
+    },
+    {
+      title: 'BidFinds!',
+      type: 'GEO/Web App',
+      description: 'Government contracting platform with bid alerts and proposal tools.',
+      image: '/screenshots/bidfinds.png',
+      tags: ['SaaS', 'Gov Tech', 'Alerts'],
+      url: 'https://bidfinds.com'
+    },
+    {
+      title: 'ConstructionBids.ai',
+      type: 'AI-SEO/SaaS',
+      description: 'AI-powered bid discovery platform for contractors. Multi-tier pricing.',
+      image: '/screenshots/constructionbids.png',
+      tags: ['AI', 'Construction', 'SaaS'],
+      url: 'https://constructionbids.ai'
+    }
+  ];
 
   const emailSamples = {
     medical: {
@@ -551,6 +587,19 @@ Clock's ticking.`
           @keyframes fadeIn { to { opacity: 1; } }
           @keyframes slideIn { to { transform: scale(1); opacity: 1; } }
 
+          .web-design-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+          .web-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.3s; }
+          .web-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
+          .web-screenshot { width: 100%; height: 180px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem; border-bottom: 1px solid var(--border); }
+          .web-content { padding: 1.25rem; }
+          .web-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+          .web-title { font-size: 1.1rem; font-weight: 600; }
+          .web-type { background: var(--warning); color: #000; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+          .web-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+          .web-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 500; }
+          .web-link:hover { text-decoration: underline; }
+          @media (max-width: 768px) { .web-design-grid { grid-template-columns: 1fr; } }
+
           .cta-section { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%); border: 1px solid var(--border); border-radius: 16px; padding: 3rem; text-align: center; margin: 3rem 0; }
           .cta-section h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
           .cta-section p { color: var(--text-secondary); margin-bottom: 1.5rem; }
@@ -577,6 +626,7 @@ Clock's ticking.`
             <div className="logo">Ethan Sperry</div>
             <div className="links">
               <a onClick={() => setActiveTab('cases')}>Case Studies</a>
+              <a onClick={() => setActiveTab('web')}>Web & SEO</a>
               <a onClick={() => setActiveTab('copy')}>Email Copy</a>
               <a onClick={() => setActiveTab('projects')}>Projects</a>
             </div>
@@ -592,6 +642,9 @@ Clock's ticking.`
           <div className="tabs">
             <button className={`tab ${activeTab === 'cases' ? 'active' : ''}`} onClick={() => setActiveTab('cases')}>
               Case Studies
+            </button>
+            <button className={`tab ${activeTab === 'web' ? 'active' : ''}`} onClick={() => setActiveTab('web')}>
+              Web & SEO
             </button>
             <button className={`tab ${activeTab === 'copy' ? 'active' : ''}`} onClick={() => setActiveTab('copy')}>
               Email Copy
@@ -639,6 +692,35 @@ Clock's ticking.`
               </div>
 
               </section>
+          )}
+
+          {activeTab === 'web' && (
+            <section className="section">
+              <div className="section-header">
+                <h2>Web Design & SEO</h2>
+                <span className="section-badge">Client Work</span>
+              </div>
+              <div className="web-design-grid">
+                {webDesignProjects.map((project, i) => (
+                  <div key={i} className="web-card">
+                    <div className="web-screenshot" data-project={project.title}>
+                      Screenshot placeholder
+                    </div>
+                    <div className="web-content">
+                      <div className="web-meta">
+                        <span className="web-title">{project.title}</span>
+                        <span className="web-type">{project.type}</span>
+                      </div>
+                      <p className="web-desc">{project.description}</p>
+                      <div className="case-tags" style={{marginBottom: '1rem'}}>
+                        {project.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
+                      </div>
+                      <a href={project.url} target="_blank" rel="noopener" className="web-link">View Site →</a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           )}
 
           {activeTab === 'copy' && (
